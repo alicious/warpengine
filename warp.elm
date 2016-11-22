@@ -6,15 +6,6 @@ import Dict exposing (Dict, fromList, insert)
 
 
 
-main =
-  Html.beginnerProgram
-    { model = model
-    , view = view
-    , update = update
-    }
-
-
-
 -- MODEL
 
 type alias Model = 
@@ -22,8 +13,8 @@ type alias Model =
   , palette : Dict Int String
   }
 
-model : Model
-model =
+initModel : Model
+initModel =
   { colorPlan = [ ]
   , palette = fromList 
     [ (1, "Red")
@@ -32,21 +23,17 @@ model =
     ]
   } 
 
+init : (Model, Cmd Msg)
+init =
+  (initModel, Cmd.none)
 
 
--- UPDATE
+
+-- MESSAGES
 
 type Msg 
   = Add Int 
   | Change Int String
-
-update : Msg -> Model -> Model
-update msg model =
-  case msg of 
-    Add color ->
-      { model | colorPlan = color :: model.colorPlan }
-    Change index hex ->
-      { model | palette = insert index hex model.palette } 
 
 
 
@@ -79,3 +66,37 @@ makeColorButton (index, color) =
 makePaletteInput : (Int, String) -> Html Msg 
 makePaletteInput (index, hex) =
     input [ placeholder (toString hex), onInput (Change index) ] []
+
+
+
+-- UPDATE
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+  case msg of 
+    Add color ->
+      ( { model | colorPlan = color :: model.colorPlan }, Cmd.none )
+    Change index hex ->
+      ( { model | palette = insert index hex model.palette }, Cmd.none )
+
+
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.none
+
+
+
+-- MAIN
+
+main : Program Never Model Msg
+main =
+  Html.program
+    { init = init 
+    , view = view
+    , update = update
+    , subscriptions = subscriptions
+    }
