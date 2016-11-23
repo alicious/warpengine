@@ -3,6 +3,7 @@ module Style exposing (..)
 body = 
   [ ( "margin", "20px" )
   , ( "display", "inline-block" )
+  , ( "font-family", " 'Courier New', Courier, monospace " )
   ]
 
 container = 
@@ -33,10 +34,11 @@ paletteInput =
 paletteEntry = 
   [ ( "margin-top", "2px" )
   , ( "overflow", "hidden" )
+  , ( "font-size", "11px" )
   ]
 
 colorCatalog =
-  [ ( "width", "420px" )
+  [ ( "width", "440px" )
   , ( "float", "right" )
   , ( "margin-top", "84px" )
   ]
@@ -46,8 +48,8 @@ colorSwatch color selected =
   let borderColor =
     if selected then "#000000" else color
   in
-    [ ( "width", "17px" )
-    , ( "height", "17px" )
+    [ ( "width", "18px" )
+    , ( "height", "18px" )
     , ( "border", "2px solid " ++ borderColor )
     , ( "background-color", color )
     , ( "float", "left" )
