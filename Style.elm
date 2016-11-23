@@ -1,47 +1,58 @@
 module Style exposing (..)
 
-body : List ( String, String )
 body = 
   [ ( "margin", "20px" )
+  , ( "display", "inline-block" )
   ]
 
-colorPlan : List ( String, String )
-colorPlan = 
-  [ ( "float", "left" ) 
-  , ( "width", "100%" )
+container = 
+  [ ( "overflow", "hidden" )
   ]
 
-thread : List ( String, String )
 thread = 
   [ ( "height", "100px" )
   , ( "width", "1px" )
   , ( "float", "left" )
   ] 
 
-palette : List ( String, String )
+
 palette = 
   [ ( "float", "left" )
   , ( "margin-top", "10px" )
-  , ( "width" , "100%" )
   ]
 
-paletteButton : List ( String, String )
 paletteButton =
-  [ ( "width", "20px" )
-  , ( "height", "20px" )
-  , ( "border", "1px solid black" )
-  , ( "margin-right", "2px" )
+  [ ( "margin-right", "2px" )
   ]
 
 paletteInput = 
   [ ( "height", "14px" )
+  , ( "float", "left" )
   ]
 
 paletteEntry = 
   [ ( "margin-top", "2px" )
+  , ( "overflow", "hidden" )
   ]
 
+colorCatalog =
+  [ ( "width", "420px" )
+  , ( "float", "right" )
+  , ( "margin-top", "84px" )
+  ]
+
+colorSwatch : String -> Bool -> List ( String, String )
+colorSwatch color selected = 
+  let borderColor =
+    if selected then "#000000" else color
+  in
+    [ ( "width", "17px" )
+    , ( "height", "17px" )
+    , ( "border", "2px solid " ++ borderColor )
+    , ( "background-color", color )
+    , ( "float", "left" )
+    ]
+
 shareAndImport = 
-  [ ( "float", "left" )
-  , ( "margin-top", "30px" )
+  [ ( "margin-top", "30px" )
   ]

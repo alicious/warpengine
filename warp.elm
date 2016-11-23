@@ -5,6 +5,8 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Dict exposing (Dict, fromList, insert)
 import Style 
+import MB
+import DoubleSide
 
 
 -- MODEL
@@ -12,42 +14,55 @@ import Style
 type alias Model = 
   { colorPlan : List Int
   , palette : Palette
+  , selectedPalette : Int 
   }
 
-type alias Palette = Dict Int String
+type alias Palette = Dict Int PaletteColor 
+
+type alias PaletteColor = { hex : String, name : String }
 
 initModel : Model
 initModel =
-  { colorPlan = [ 
-      0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,1,5,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,1,5,0,4,0,4,1,5,0,4,0,4,0,4,0,4,0,4,1,5,0,4,0,4,1,5,0,4,0,4,1,5,0,4,1,5,1,6,0,4,0,4,1,5,0,4,0,4,1,5,0,4,1,5,1,6,0,4,1,5,1,6,0,4,0,4,1,5,0,4,1,5,1,6,0,4,1,5,1,6,0,4,1,5,1,6,1,5,1,6,2,6,0,4,1,5,1,6,0,4,1,5,1,6,1,5,1,6,2,6,1,5,1,6,2,6,0,4,1,5,1,6,1,5,1,6,2,6,1,5,1,6,2,6,1,5,1,6,2,6,1,6,2,6,2,7,1,5,1,6,2,6,1,5,1,6,2,6,1,6,2,6,2,7,1,6,2,6,2,7,1,5,1,6,2,6,1,6,2,6,2,7,1,6,2,6,2,7,1,6,2,6,2,7,2,6,2,7,3,7,1,6,2,6,2,7,1,6,2,6,2,7,2,6,2,7,3,7,2,6,2,7,3,7,1,6,2,6,2,7,2,6,2,7,3,7,2,6,2,7,3,7,2,6,2,7,3,7,1,6,2,6,2,7,2,6,2,7,3,7,2,6,2,7,3,7,1,6,2,6,2,7,1,6,2,6,2,7,2,6,2,7,3,7,1,6,2,6,2,7,1,6,2,6,2,7,1,6,2,6,2,7,1,5,1,6,2,6,1,6,2,6,2,7,1,6,2,6,2,7,1,5,1,6,2,6,1,5,1,6,2,6,1,6,2,6,2,7,1,5,1,6,2,6,1,5,1,6,2,6,1,5,1,6,2,6,0,4,1,5,1,6,1,5,1,6,2,6,1,5,1,6,2,6,0,4,1,5,1,6,0,4,1,5,1,6,1,5,1,6,2,6,0,4,1,5,1,6,0,4,1,5,1,6,0,4,1,5,1,6,0,4,0,4,1,5,0,4,1,5,1,6,0,4,1,5,1,6,0,4,0,4,1,5,0,4,0,4,1,5,0,4,1,5,1,6,0,4,0,4,1,5,0,4,0,4,1,5,0,4,0,4,1,5,0,4,0,4,0,4,0,4,0,4,1,5,0,4,0,4,1,5,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,1,5,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0,4
-      ]
-  , palette = fromList 
-    [ ( 0, "#7b5b6b" )
-    , ( 1, "#928c87" )
-    , ( 2, "#dbc5a4" )
-    , ( 3, "#eabc7b" )
-    , ( 4, "#4d4d33" )
-    , ( 5, "#6f8545" )
-    , ( 6, "#a5c0b3" )
-    , ( 7, "#d5ddda" )
-    ]
+  { colorPlan = DoubleSide.colorPlan
+  , palette = fromList DoubleSide.palette
+  , selectedPalette = 0
   } 
 
 init : ( Model, Cmd Msg )
 init =
   ( initModel, Cmd.none )
 
+paletteColorFromHex : Int -> String -> ( Int, PaletteColor )
+paletteColorFromHex index hex = 
+  let name = 
+    case List.head ( List.filter ( hexMatches hex ) MB.catalog ) of
+      Nothing -> "unknown"
+      Just (hex, name) -> name
+  in
+    ( index, { hex = hex, name = name } )
+
+hexMatches : String -> ( String, String ) -> Bool
+hexMatches target ( hex, name ) =
+  if target == hex then True else False
+  
 codifyPalette : Palette -> String
 codifyPalette palette = 
   palette
   |> Dict.values
+  |> List.map .hex
   |> String.join "&"
+
+getHex : ( String, String ) -> String
+getHex ( hex, name ) = hex
+
+getName : ( String, String ) -> String
+getName ( hex, name ) = name 
 
 decodePalette : String -> Palette
 decodePalette paletteCode =
   paletteCode
   |> String.split "&"
-  |> List.indexedMap (,)
+  |> List.indexedMap paletteColorFromHex 
   |> fromList
   
 
@@ -56,8 +71,9 @@ decodePalette paletteCode =
 
 type Msg 
   = Add Int 
-  | Change Int String
   | UpdatePalette String
+  | ChangePaletteEntry String String
+  | UpdateSelectedPalette Int
 
 
 
@@ -66,16 +82,23 @@ type Msg
 view : Model -> Html Msg
 view model =
   div [ style Style.body ]
-    [ div [ style Style.colorPlan ]
+    [ div [ style Style.container ]
           ( List.map ( drawThread model ) model.colorPlan )
-    , div [ style Style.palette ]
-      ( model.palette
-        |> Dict.toList
-        |> List.map makePaletteEntry
-      )
+    , div [ style Style.container ]
+      [ div [ style Style.palette ]
+        ( model.palette
+          |> Dict.toList
+          |> List.map ( makePaletteEntry model.selectedPalette )
+        )
+      , div [ style Style.colorCatalog ]
+            ( MB.catalog
+              |> List.map ( makeSwatch model )
+            )
+      ]
     , div [ style Style.shareAndImport ]
           [ input [ onInput ( UpdatePalette ) 
                   , value ( codifyPalette model.palette )
+                  , style [ ( "width", "428px" ) ]
                   ]
                   []
           ]
@@ -86,34 +109,40 @@ drawThread model colorIndex =
     let color = 
         case Dict.get colorIndex model.palette of
             Nothing -> "#FFFFFF"
-            Just color -> color
+            Just paletteEntry -> paletteEntry.hex
     in
         div [ style ( ( "background-color", color ) :: Style.thread ) ]
         []
 
-makePaletteButton : Int -> String -> Html Msg 
-makePaletteButton index hexcolor =
+makePaletteButton : Int -> String -> Bool -> Html Msg 
+makePaletteButton index hexcolor selected =
   button 
-    [ -- onClick ( Add index ), 
-      style ( ( "background-color", hexcolor ) :: Style.paletteButton )
+    [ onClick ( UpdateSelectedPalette index ), 
+      style ( ( Style.colorSwatch hexcolor selected ) ++ Style.paletteButton )
     ] 
-    [ text ( toString index ) ]
+    []
 
-makePaletteInput : Int -> String -> Html Msg 
-makePaletteInput index hexcolor =
-    input [ value hexcolor 
-          , onInput ( Change index ) 
-          , style Style.paletteInput
-          ] 
-          []
-
-makePaletteEntry : ( Int, String ) -> Html Msg
-makePaletteEntry ( index, hexcolor ) =
+makePaletteEntry : Int -> ( Int, PaletteColor ) -> Html Msg
+makePaletteEntry current ( index, color ) =
+  let selected = current == index
+  in
     div [ style Style.paletteEntry ]
-    [ makePaletteButton index hexcolor 
-    , makePaletteInput index hexcolor
+    [ makePaletteButton index color.hex selected
+    , text color.name 
     ]
 
+makeSwatch : Model -> ( String, String ) -> Html Msg
+makeSwatch model ( hexcolor, name ) =
+  let selected =
+    case Dict.get model.selectedPalette model.palette of
+      Nothing -> False
+      Just paletteEntry -> hexcolor == paletteEntry.hex
+  in
+    div [ style ( Style.colorSwatch hexcolor selected ) 
+        , onClick ( ChangePaletteEntry hexcolor name )
+        ]
+      []
+ 
 
 -- UPDATE
 
@@ -122,10 +151,16 @@ update msg model =
   case msg of 
     Add color ->
       ( { model | colorPlan = color :: model.colorPlan }, Cmd.none )
-    Change index hex ->
-      ( { model | palette = insert index hex model.palette }, Cmd.none )
     UpdatePalette paletteCode ->
       ( { model | palette = decodePalette paletteCode }, Cmd.none )
+    ChangePaletteEntry hex name ->
+      ( { model | palette = 
+        insert model.selectedPalette { hex = hex, name = name } model.palette
+        }
+      , Cmd.none
+      )  
+    UpdateSelectedPalette index ->
+      ( { model | selectedPalette = index }, Cmd.none )
 
 
 
