@@ -14,7 +14,7 @@ import DoubleSide
 -- MODEL
 
 type alias Model = 
-  { colorPlan : List Int
+  { warpColors : List Int
   , palette : Palette
   , selectedPalette : Int 
   }
@@ -25,7 +25,7 @@ type alias PaletteColor = { hex : String, name : String }
 
 initModel : Model
 initModel =
-  { colorPlan = DoubleSide.colorPlan
+  { warpColors = DoubleSide.warpColors
   , palette = fromList DoubleSide.palette
   , selectedPalette = 0
   } 
@@ -88,7 +88,7 @@ view : Model -> Html Msg
 view model =
   div [ style Style.body ]
     [ div [ style Style.container ]
-          ( List.map ( drawThread model ) model.colorPlan )
+          ( List.map ( drawThread model ) model.warpColors )
     , div [ style Style.container ]
       [ div [ style Style.palette ]
         ( model.palette
@@ -155,7 +155,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of 
     Add color ->
-      ( { model | colorPlan = color :: model.colorPlan }, Cmd.none )
+      ( { model | warpColors = color :: model.warpColors }, Cmd.none )
     UpdatePalette paletteCode ->
       let newPalette = decodePalette paletteCode
       in 
