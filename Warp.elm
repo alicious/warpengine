@@ -4,6 +4,8 @@ import Html exposing (Html, button, div, text, select, option, input)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Dict exposing (Dict, fromList, insert)
+import Regex
+
 import Style 
 import MB
 import DoubleSide
@@ -32,15 +34,6 @@ init : ( Model, Cmd Msg )
 init =
   ( initModel, Cmd.none )
 
-paletteColorFromHex : Int -> String -> ( Int, PaletteColor )
-paletteColorFromHex index hex = 
-  let name = 
-    case List.head ( List.filter ( hexMatches hex ) MB.catalog ) of
-      Nothing -> "unknown"
-      Just (hex, name) -> name
-  in
-    ( index, { hex = hex, name = name } )
-
 hexMatches : String -> ( String, String ) -> Bool
 hexMatches target ( hex, name ) =
   if target == hex then True else False
@@ -52,19 +45,31 @@ codifyPalette palette =
   |> List.map .hex
   |> String.join "&"
 
-getHex : ( String, String ) -> String
-getHex ( hex, name ) = hex
-
-getName : ( String, String ) -> String
-getName ( hex, name ) = name 
-
-decodePalette : String -> Palette
+decodePalette : String -> Maybe Palette
 decodePalette paletteCode =
-  paletteCode
-  |> String.split "&"
-  |> List.indexedMap paletteColorFromHex 
-  |> fromList
+  let hexList = 
+    paletteCode
+    |> String.split "&"
+    |> List.filter ( Regex.contains ( Regex.regex "^#[0-9a-f]{6}" ) )
+  in
+    case ( List.length hexList ) == 8 of
+    True -> 
+      hexList
+      |> List.indexedMap paletteColorFromHex 
+      |> fromList
+      |> Just
+    False -> Nothing
+    
   
+paletteColorFromHex : Int -> String -> ( Int, PaletteColor )
+paletteColorFromHex index hex = 
+  let name = 
+    case List.head ( List.filter ( hexMatches hex ) MB.catalog ) of
+      Nothing -> "unknown"
+      Just (hex, name) -> name
+  in
+    ( index, { hex = hex, name = name } )
+
 
 
 -- MESSAGES
@@ -152,7 +157,13 @@ update msg model =
     Add color ->
       ( { model | colorPlan = color :: model.colorPlan }, Cmd.none )
     UpdatePalette paletteCode ->
-      ( { model | palette = decodePalette paletteCode }, Cmd.none )
+      let newPalette = decodePalette paletteCode
+      in 
+        case newPalette of
+          Just palette ->
+            ( { model | palette = palette }, Cmd.none )
+          Nothing ->
+            ( model, Cmd.none )
     ChangePaletteEntry hex name ->
       ( { model | palette = 
         insert model.selectedPalette { hex = hex, name = name } model.palette
