@@ -4,3 +4,4 @@ elm-package.json
 # elm-repl generated files
 repl-temp-*
 test
+*.swp
