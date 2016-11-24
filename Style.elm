@@ -10,9 +10,11 @@ container =
   [ ( "overflow", "hidden" )
   ]
 
-thread = 
-  [ ( "height", "100px" )
-  , ( "width", "1px" )
+thread : ( Float, Float ) -> String -> List ( String, String )
+thread ( height, width ) color = 
+  [ ( "height", ( toString height ) ++ "px" )
+  , ( "width", ( toString width ) ++ "px" )
+  , ( "background-color", color )
   , ( "float", "left" )
   ] 
 
