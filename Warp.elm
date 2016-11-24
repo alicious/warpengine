@@ -61,19 +61,19 @@ initPalette : Palette
 initPalette =
   fromList
   [ ( 0, { hex = "#7b5b6b", name = "plum" } )
-  , ( 1, { hex = "#928c87", name = "dark grey" } )
-  , ( 2, { hex = "#dbc5a4", name = "flax" } )
-  , ( 3, { hex = "#eabc7b", name = "honey" } )
-  , ( 4, { hex = "#4d4d33", name = "taupe" } )
-  , ( 5, { hex = "#6f8545", name = "lime" } )
-  , ( 6, { hex = "#a5c0b3", name = "seaton" } )
+  , ( 1, { hex = "#4d4d33", name = "taupe" } )
+  , ( 2, { hex = "#928c87", name = "dark grey" } )
+  , ( 3, { hex = "#6f8545", name = "lime" } )
+  , ( 4, { hex = "#dbc5a4", name = "flax" } )
+  , ( 5, { hex = "#a5c0b3", name = "seaton" } )
+  , ( 6, { hex = "#eabc7b", name = "honey" } )
   , ( 7, { hex = "#d5ddda", name = "pale grey" } )
   ]
 
 initModel : Model
 initModel =
   let ( warpA, warpB ) = 
-    ( initWarp AmethystMary.warp, initWarp DoubleSide.warp )
+    ( initWarp DoubleSide.warp, initWarp AmethystMary.warp )
   in
     { warp = warpA
     , palette = initPalette

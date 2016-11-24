@@ -20,6 +20,7 @@ thread =
 palette = 
   [ ( "float", "left" )
   , ( "margin-top", "10px" )
+  , ( "width", "200px" )
   ]
 
 paletteButton =
@@ -33,14 +34,17 @@ paletteInput =
 
 paletteEntry = 
   [ ( "margin-top", "2px" )
+  , ( "float", "left" )
   , ( "overflow", "hidden" )
   , ( "font-size", "11px" )
+  , ( "width", "100px" )
   ]
 
 colorCatalog =
-  [ ( "width", "440px" )
+  [ ( "width", "198px" )
   , ( "float", "right" )
   , ( "margin-top", "84px" )
+  , ( "border", "1px solid #aaaaaa" )
   ]
 
 colorSwatch : String -> Bool -> List ( String, String )
