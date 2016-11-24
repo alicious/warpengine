@@ -3,6 +3,7 @@ module Warp exposing (..)
 import Html exposing ( Html, button, div, text, select, option, input )
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick, onInput )
+import Window
 import Dict exposing ( Dict, fromList, insert )
 import Array exposing ( Array )
 import Json.Decode as Decoder
@@ -64,6 +65,7 @@ initModel =
     , selectedPalette = 0
     , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB ] )
     , selectedTemplate = 0
+    , window = { height = 0, width = 800 }
     } 
 
 init : ( Model, Cmd Msg )
@@ -109,22 +111,16 @@ hexMatches target ( hex, name ) =
   
 
 
--- MESSAGES
-
-type Msg 
-  = UpdatePalette String
-  | ChangePaletteEntry String String
-  | UpdateSelectedPalette Int
-
-
-
 -- VIEW
 
 view : Model -> Html Msg
 view model =
   div [ style Style.body ]
     [ div [ style Style.container ]
-      ( Array.toList ( Array.map ( drawThread model ) model.warp.warpColors ) )
+        ( model.warp.warpColors
+          |> Array.map ( drawThread model )
+          |> Array.toList
+        )
     , div [ style Style.container ]
       [ div [ style Style.palette ]
         ( model.palette
@@ -145,6 +141,15 @@ view model =
           ]
     ]
 
+threadSize : Model -> ( Float, Float )
+threadSize model = 
+  let ( width, ends ) = 
+    ( toFloat model.window.width
+    , toFloat ( Array.length model.warp.warpColors )
+    )
+  in
+    ( 100, ( width - 40 ) / ends )
+  
 drawThread : Model -> Int -> Html Msg
 drawThread model colorIndex =
     let color = 
@@ -152,7 +157,7 @@ drawThread model colorIndex =
             Nothing -> "#FFFFFF"
             Just paletteEntry -> paletteEntry.hex
     in
-        div [ style ( ( "background-color", color ) :: Style.thread ) ]
+        div [ style ( Style.thread ( threadSize model ) color ) ]
         []
 
 makePaletteButton : Int -> String -> Bool -> Html Msg 
@@ -185,6 +190,16 @@ makeSwatch model ( hexcolor, name ) =
       []
  
 
+-- MESSAGES
+
+type Msg 
+  = UpdatePalette String
+  | ChangePaletteEntry String String
+  | UpdateSelectedPalette Int
+  | Resize Int Int 
+
+
+
 -- UPDATE
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -201,6 +216,8 @@ update msg model =
       )  
     UpdateSelectedPalette index ->
       ( { model | selectedPalette = index }, Cmd.none )
+    Resize height width ->
+      ( { model | window = { height = height, width = width } }, Cmd.none )
 
 
 
@@ -219,7 +236,7 @@ updatePalette paletteCode model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+  Window.resizes (\{height, width} -> Resize height width)
 
 
 

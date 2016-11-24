@@ -10,11 +10,8 @@ type alias Model =
   , selectedPalette : Int 
   , warpTemplates : Dict Int Warp
   , selectedTemplate : Int
+  , window : AppWindow
   }
-
-type alias Palette = Dict Int PaletteColor 
-
-type alias PaletteColor = { hex : String, name : String }
 
 type alias Warp = { warpColors : Array Int
                   , threading : Array Int
@@ -22,5 +19,11 @@ type alias Warp = { warpColors : Array Int
                   , weftColors : Array Int
                   , tieup : List ( List Int )
                   } 
+
+type alias Palette = Dict Int PaletteColor 
+
+type alias PaletteColor = { hex : String, name : String }
+
+type alias AppWindow = { height : Int, width : Int }
 
                   
