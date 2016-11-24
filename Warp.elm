@@ -12,28 +12,10 @@ import Style
 import MB
 import DoubleSide 
 import AmethystMary
-
+import Ports
+import Modle exposing (..)
 
 -- MODEL
-
-type alias Model = 
-  { warp : Warp
-  , palette : Palette
-  , selectedPalette : Int 
-  , warpTemplates : Dict Int Warp
-  , selectedTemplate : Int
-  }
-
-type alias Palette = Dict Int PaletteColor 
-
-type alias PaletteColor = { hex : String, name : String }
-
-type alias Warp = { warpColors : Array Int
-                  , threading : Array Int
-                  , treadling : Array Int
-                  , weftColors : Array Int
-                  , tieup : List ( List Int )
-                  } 
 
 initWarp : { a
               | threading : String
@@ -51,12 +33,6 @@ initWarp warp =
   , tieup = warp.tieup
   }
 
-jsonToArray : String -> Array Int
-jsonToArray string =
-  case Decoder.decodeString ( Decoder.array Decoder.int ) string of
-  Ok value -> value
-  Err _ -> Array.empty
-
 initPalette : Palette
 initPalette =
   fromList
@@ -69,6 +45,14 @@ initPalette =
   , ( 6, { hex = "#eabc7b", name = "honey" } )
   , ( 7, { hex = "#d5ddda", name = "pale grey" } )
   ]
+
+
+jsonToArray : String -> Array Int
+jsonToArray string =
+  case Decoder.decodeString ( Decoder.array Decoder.int ) string of
+  Ok value -> value
+  Err _ -> Array.empty
+
 
 initModel : Model
 initModel =
@@ -84,7 +68,8 @@ initModel =
 
 init : ( Model, Cmd Msg )
 init =
-  ( initModel, Cmd.none )
+    let model = initModel in
+    ( model, Ports.warpChange model.warp )
 
 codifyPalette : Palette -> String
 codifyPalette palette = 
@@ -206,23 +191,28 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of 
     UpdatePalette paletteCode ->
-      let newPalette = decodePalette paletteCode
-      in 
-        case newPalette of
-          Just palette ->
-            ( { model | palette = palette }, Cmd.none )
-          Nothing ->
-            ( model, Cmd.none )
+        let newModle = updatePalette paletteCode model in        
+          ( newModle, Ports.paletteChange (Ports.paletteToMsg newModle.palette) )
     ChangePaletteEntry hex name ->
       ( { model | palette = 
         insert model.selectedPalette { hex = hex, name = name } model.palette
         }
-      , Cmd.none
+      , Ports.paletteChange (Ports.paletteToMsg model.palette)
       )  
     UpdateSelectedPalette index ->
       ( { model | selectedPalette = index }, Cmd.none )
 
 
+
+updatePalette : String -> Model -> Model
+updatePalette paletteCode model =
+  let newPalette = decodePalette paletteCode in 
+    case newPalette of
+      Just palette ->
+        { model | palette = palette }
+      Nothing ->
+        model
+    
 
 -- SUBSCRIPTIONS
 
