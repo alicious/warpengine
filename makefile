@@ -1,7 +1,8 @@
 
 
 elm:
-	elm-make Warp.elm --output=warp.js
+	mkdir -p www/js
+	elm-make Warp.elm --output=www/js/warp.js
 
 
 www: elm

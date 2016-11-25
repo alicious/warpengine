@@ -5,5 +5,4 @@ repl-temp-*
 test
 *.swp
 *~
-warp.js
 www
