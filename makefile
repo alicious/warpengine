@@ -4,12 +4,21 @@ elm:
 	elm-make Warp.elm --output=warp.js
 
 
-htdocs: elm
-	mkdir -p htdocs
-	cp -r index.html draw.js warp.js css/ htdocs
+www: elm
+	mkdir -p www
+	mkdir -p www/js 
+	mkdir -p www/css
+	cp -r index.html js css www
 
-server: htdocs
-	cd htdocs && python -m SimpleHTTPServer 8000
+server: www 
+	cd www && python -m SimpleHTTPServer 8000
 
 clean:
-	-rm -rf htdocs
+	-rm -rf www
+
+deploy: www
+	-rm -rf cats-cradle-chromatic 
+	mkdir -p cats-cradle-chromatic 
+	cp -r www cats-cradle-chromatic
+	cp app.yaml cats-cradle-chromatic
+	cd cats-cradle-chromatic && gcloud app deploy
