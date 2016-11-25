@@ -38,14 +38,15 @@ initWarp warp =
 initPalette : Palette
 initPalette =
   fromList
-  [ ( 0, { hex = "#7b5b6b", name = "plum" } )
-  , ( 1, { hex = "#4d4d33", name = "taupe" } )
+  [ ( 0, { hex = "#666666", name = "grey" } )
+  , ( 1, { hex = "#7b5b6b", name = "plum" } )
   , ( 2, { hex = "#928c87", name = "dark grey" } )
-  , ( 3, { hex = "#6f8545", name = "lime" } )
-  , ( 4, { hex = "#dbc5a4", name = "flax" } )
-  , ( 5, { hex = "#a5c0b3", name = "seaton" } )
-  , ( 6, { hex = "#eabc7b", name = "honey" } )
-  , ( 7, { hex = "#d5ddda", name = "pale grey" } )
+  , ( 3, { hex = "#dbc5a4", name = "flax" } )
+  , ( 4, { hex = "#eabc7b", name = "honey" } )
+  , ( 5, { hex = "#4d4d33", name = "taupe" } )
+  , ( 6, { hex = "#6f8545", name = "lime" } )
+  , ( 7, { hex = "#a5c0b3", name = "seaton" } )
+  , ( 8, { hex = "#d5ddda", name = "pale grey" } )
   ]
 
 
@@ -63,7 +64,7 @@ initModel =
   in
     { warp = warpA
     , palette = initPalette
-    , selectedPalette = 0
+    , selectedPalette = 1
     , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB ] )
     , selectedTemplate = 0
     } 
@@ -116,29 +117,49 @@ hexMatches target ( hex, name ) =
 view : Model -> Html Msg
 view model =
   div [ style Style.body ]
+  {--
     [ div [ style Style.container ]
         ( model.warp.warpColors
           |> Array.map ( drawThread model )
           |> Array.toList
         )
-    , div [ style Style.container ]
-      [ div [ style Style.palette ]
-        ( model.palette
-          |> Dict.toList
-          |> List.map ( makePaletteEntry model.selectedPalette )
-        )
+  --}
+    [ div [ style Style.container ]
+      [ div [ class "palette-controls" ]
+        [ div [ class "weft-palette" ]
+          [ div [ class "weft-label" ] [ text "weft color: " ]
+          , model.palette
+            |> weftPaletteEntry
+            |> makePaletteEntry model.selectedPalette
+          ]
+        , div [ class "warp-palette" ]
+          ( warpPaletteList model.palette
+            |> List.map ( makePaletteEntry model.selectedPalette )
+          ) 
+        ]
       , div [ class "colorCatalog" ]
           ( List.map ( makeSwatch model ) MB.catalog )
       ]
-    , div [ style Style.shareAndImport ]
-          [ input [ onInput ( UpdatePalette ) 
+    , div [] 
+          [ input [ class "shareAndImport"
+                  , onInput ( UpdatePalette ) 
                   , value ( codifyPalette model.palette )
-                  , style [ ( "width", "428px" ) ]
                   ]
                   []
           ]
     ]
 
+weftPaletteEntry : Palette -> ( Int, PaletteColor )
+weftPaletteEntry palette =
+  case List.head ( Dict.toList palette ) of
+    Just entry -> entry
+    Nothing -> ( 0, { hex = "#666666", name = "default weft" } )
+ 
+warpPaletteList : Palette -> List ( Int, PaletteColor )
+warpPaletteList palette =
+  case List.tail ( Dict.toList palette ) of
+    Just list -> list
+    Nothing -> [] 
 threadSize : Model -> Float
 threadSize model = 
   100 / ( toFloat ( Array.length model.warp.warpColors ) )

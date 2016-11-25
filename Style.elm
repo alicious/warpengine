@@ -16,12 +16,6 @@ thread width color =
   , ( "float", "left" )
   ] 
 
-
-palette = 
-  [ ( "overflow", "hidden" )
-  , ( "margin-top", "10px" )
-  ]
-
 paletteInput = 
   [ ( "height", "14px" )
   , ( "float", "left" )
@@ -47,7 +41,3 @@ swatch color selected =
     , ( "height", "26px" )
     , ( "float", "left" )
     ]
-
-shareAndImport = 
-  [ ( "margin-top", "30px" )
-  ]
