@@ -23,13 +23,16 @@ function main () {
         var weftthreads = warp.weftColors;
 
         var threadWidth;
-        var warpWidth = canvas.parentElement.getBoundingClientRect().width;
+        var warpWidth =
+            canvas
+            .parentElement
+            .getBoundingClientRect()
+            .width;
 
         if ( threads.length != 0 ) {
-            threadWidth = Math.floor(warpWidth/threads.length);
-            warpWidth = threadWidth * threads.length;
+            threadWidth = warpWidth/threads.length;
         }
-        console.log( "warpWidth %s threadWidth %s threads.length %s", warpWidth, threadWidth, threads.length); //BOOG
+
         canvas.width = warpWidth;
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
