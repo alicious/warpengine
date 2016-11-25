@@ -30,7 +30,8 @@ function main () {
             .width;
 
         if ( threads.length != 0 ) {
-            threadWidth = warpWidth/threads.length;
+            threadWidth = Math.floor(warpWidth/threads.length);
+            warpWidth   = threadWidth * threads.length;
         }
 
         canvas.width = warpWidth;
