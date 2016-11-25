@@ -44,12 +44,16 @@ function main () {
         var warpHeight = 200; 
 
         if ( threads.length != 0 ) {
-            // Couput the threadWidth as a integer number of pixles or
-            // 1 if 0.
-            threadWidth = Math.max(Math.floor(warpWidth/threads.length), 1);
+            threadWidth = warpWidth/threads.length;
 
-            // Reduce warp width to exatly fit threads
-            warpWidth = threadWidth * threads.length;
+            // If we can make the thread width
+            // and intergern number of pixles
+            if ( threadWidth > 1 ) {
+                threadWidth = Math.floor(threadWidth);
+
+                // Reduce warp width to exatly fit threads
+                warpWidth = threadWidth * threads.length;
+            }
 
             warpHeight = threadWidth * treadling.length;
         }
