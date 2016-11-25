@@ -10,3 +10,6 @@ htdocs: elm
 
 server: elm
 	cd htdocs && python -m SimpleHTTPServer 8000
+
+clean:
+	-rm -rf htdocs
