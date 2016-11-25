@@ -3,7 +3,7 @@ body {
   text-align: center;
 }
 
-#warp {
+#warp, #canvas-container {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
