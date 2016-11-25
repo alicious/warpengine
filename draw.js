@@ -12,9 +12,6 @@ function main () {
     var ctx    = canvas.getContext("2d");
 
     function draw ( warp, colors ) {
-        console.log("WARP: ", warp);
-        console.log("COLORS: ", colors);
-
         
         var threading   = warp.threading;
         var tieup       = warp.tieup;
