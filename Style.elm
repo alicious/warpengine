@@ -43,8 +43,8 @@ swatch color selected =
   in
     [ ( "border", "2px solid " ++ borderColor )
     , ( "background-color", color )
-    , ( "width", "28px" )
-    , ( "height", "28px" )
+    , ( "width", "26px" )
+    , ( "height", "26px" )
     , ( "float", "left" )
     ]
 
