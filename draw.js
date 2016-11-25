@@ -13,7 +13,14 @@ function main () {
     app.ports.warpChange.subscribe(function (data) {
         // Wait for the next browser call to do the paint
         requestAnimationFrame(function() {
-            draw(data[0], data[1]);
+            drawAll(data[0], data[1], undefined);
+        });
+    });
+
+    app.ports.colorChange.subscribe(function (data) {
+        // Wait for the next browser call to do the paint
+        requestAnimationFrame(function() {
+            drawColor(data[0], data[1], data[3]);
         });
     });
 
@@ -22,7 +29,11 @@ function main () {
     var ctx    = canvas.getContext("2d");
 
   
-    function draw ( warp, colors ) {
+    function drawAll ( warp, colors ) {
+        drawColor( warp, colors, undefined );
+    }
+    
+    function drawColor ( warp, colors, index ) {
         
         var threading   = warp.threading;
         var tieup       = warp.tieup;
@@ -69,9 +80,11 @@ function main () {
         var translate = (threadWidth % 2) / 2;
         ctx.translate(translate, translate);
 
-        // Fill the canvas with the weft color
-        ctx.fillStyle = "#000000"; //BOOG colors[ weftthreads[j] ].hex;
-	ctx.fillRect( 0, 0, canvas.width, canvas.height );
+        if ( index === undefined ) {
+            // Fill the canvas with the weft color
+            ctx.fillStyle = "#000000"; //BOOG colors[ weftthreads[j] ].hex;
+	    ctx.fillRect( 0, 0, canvas.width, canvas.height );
+        }
         
         for ( var j = 0 ; j < treadling.length ; j++ ) {
             var wOffset = j * threadWidth;
@@ -82,19 +95,24 @@ function main () {
 
                 var shaft = threading[i];
 
+                var colorIndex = threads[ i ];
+
+                // if we are drawnig just one color contine
+                // if this is not that color
+                if ( index !== undefined && colorIndex !== index )
+                    continue;
+
+                // continue if is is weft
                 if (contains( shaft, shafts ))
                     continue;
-                else {
-                    var fillColor = colors[ threads[ i ] ].hex;
 
-                    // Draw pixel
-                    ctx.fillStyle = fillColor
-	            ctx.fillRect( offset, wOffset, threadWidth, threadWidth );
-                }
+                // Draw pixel
+                ctx.fillStyle = colors[ colorIndex ].hex
+	        ctx.fillRect( offset, wOffset, threadWidth, threadWidth );
 	    }
         }    
     }
-
+    
     function contains ( value, list ) {
         
         for ( var i = 0 ; i < list.length ; i++ )

@@ -205,7 +205,7 @@ update msg model =
             insert model.selectedPalette { hex = hex, name = name } model.palette
           }
         in
-          ( newModle, Ports.warpChange (Ports.modelToChange newModle) )  
+          ( newModle, Ports.colorChange (Ports.modelToColorChange newModle) )  
     UpdateSelectedPalette index ->
       ( { model | selectedPalette = index }, Cmd.none )
 
