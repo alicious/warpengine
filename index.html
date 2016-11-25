@@ -1,13 +1,10 @@
-<div id="warp"></div>
-<script src="warp.js"></script>
-<script>
-    var node = document.getElementById('warp');
-    var app = Elm.Warp.embed(node);
-    app.ports.paletteChange.subscribe(function (id) {
-      console.log(id);
-    });
-    app.ports.warpChange.subscribe(function (warp) {
-      console.log(warp);
-    });
-
-</script>
+<html>
+  <head>
+  </head>
+  <body>
+    <canvas id="canvas" width="400"></canvas>
+    <div id="warp"></div>
+    <script src="warp.js"></script>
+    <script src="draw.js"></script>
+  <body>
+</html>
