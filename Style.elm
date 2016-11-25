@@ -30,7 +30,7 @@ paletteInput =
 
 paletteEntry = 
   [ ( "float", "left" )
-  , ( "margin", "20px" )
+  , ( "margin", "10px" )
   , ( "overflow", "hidden" )
   , ( "font-size", "11px" )
   ]
@@ -38,7 +38,8 @@ paletteEntry =
 swatch : String -> Bool -> List ( String, String )
 swatch color selected = 
   let borderColor =
-    if selected then "#000000" else color
+    if selected then "#000000" 
+    else  color
   in
     [ ( "border", "2px solid " ++ borderColor )
     , ( "background-color", color )
