@@ -7,7 +7,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
-  max-width: 900px;
+  max-width: 800px;
 }
 
 .colorCatalog {
@@ -15,5 +15,7 @@ body {
   margin-top: 10px;
 }
 
-
+.paletteButton {
+  border-radius: 2px;
+}
 
