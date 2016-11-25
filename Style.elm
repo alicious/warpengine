@@ -1,8 +1,7 @@
 module Style exposing (..)
 
 body = 
-  [ ( "margin", "20px" )
-  , ( "display", "inline-block" )
+  [ ( "padding", "20px" )
   , ( "font-family", " 'Courier New', Courier, monospace " )
   ]
 
@@ -10,10 +9,10 @@ container =
   [ ( "overflow", "hidden" )
   ]
 
-thread : ( Float, Float ) -> String -> List ( String, String )
-thread ( height, width ) color = 
-  [ ( "height", ( toString height ) ++ "px" )
-  , ( "width", ( toString width ) ++ "px" )
+thread : Float -> String -> List ( String, String )
+thread width color = 
+  [ ( "height", "100px" )
+  , ( "width", ( toString width ) ++ "%" )
   , ( "background-color", color )
   , ( "float", "left" )
   ] 

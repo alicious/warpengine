@@ -2,7 +2,7 @@ port module Ports exposing (warpChange, modelToChange)
 import Array exposing ( Array )
 import Dict exposing ( Dict )
 
-import Modle exposing (..)
+import Model exposing (..)
 
 port warpChange : (Warp, PaletteMsg) -> Cmd msg
 

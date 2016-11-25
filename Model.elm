@@ -1,4 +1,4 @@
-module Modle exposing (..)
+module Model exposing (..)
 
 import Dict exposing ( Dict, fromList, insert )
 import Array exposing ( Array )
@@ -10,7 +10,6 @@ type alias Model =
   , selectedPalette : Int 
   , warpTemplates : Dict Int Warp
   , selectedTemplate : Int
-  , window : AppWindow
   }
 
 type alias Warp = { warpColors : Array Int
@@ -23,7 +22,3 @@ type alias Warp = { warpColors : Array Int
 type alias Palette = Dict Int PaletteColor 
 
 type alias PaletteColor = { hex : String, name : String }
-
-type alias AppWindow = { height : Int, width : Int }
-
-                  
