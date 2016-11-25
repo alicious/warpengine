@@ -33,6 +33,10 @@ function main () {
 
         canvas.width = warpWidth;
         
+        var translate = (threadWidth % 2) / 2;
+
+        ctx.translate(translate, translate);
+        
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         for ( var j = 0 ; j < treadling.length ; j++ ) {
