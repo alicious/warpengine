@@ -126,10 +126,8 @@ view model =
           |> Dict.toList
           |> List.map ( makePaletteEntry model.selectedPalette )
         )
-      , div [ style Style.colorCatalog ]
-          ( MB.catalog
-            |> List.map ( makeSwatch model )
-          )
+      , div [ class "colorCatalog" ]
+          ( List.map ( makeSwatch model ) MB.catalog )
       ]
     , div [ style Style.shareAndImport ]
           [ input [ onInput ( UpdatePalette ) 
@@ -158,7 +156,7 @@ makePaletteButton : Int -> String -> Bool -> Html Msg
 makePaletteButton index hexcolor selected =
   button 
     [ onClick ( UpdateSelectedPalette index ), 
-      style ( ( Style.colorSwatch hexcolor selected ) ++ Style.paletteButton )
+      style ( Style.swatch hexcolor selected )
     ] 
     []
 
@@ -168,7 +166,6 @@ makePaletteEntry current ( index, color ) =
   in
     div [ style Style.paletteEntry ]
     [ makePaletteButton index color.hex selected
-    , text color.name 
     ]
 
 makeSwatch : Model -> ( String, String ) -> Html Msg
@@ -178,7 +175,7 @@ makeSwatch model ( hexcolor, name ) =
       Nothing -> False
       Just paletteEntry -> hexcolor == paletteEntry.hex
   in
-    div [ style ( Style.colorSwatch hexcolor selected ) 
+    div [ style ( Style.swatch hexcolor selected ) 
         , onClick ( ChangePaletteEntry hexcolor name )
         ]
       []

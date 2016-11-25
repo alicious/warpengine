@@ -7,7 +7,7 @@ catalog = [
   ( "#07978d", "aqua marine" ),
   ( "#18c4ae", "turquoise" ),
   ( "#1a9463", "emerald" ),
-  ( "#1b9a65", "peridote" ),
+  ( "#1b9a65", "" ),
   ( "#1f4991", "royal" ),
   ( "#242442", "navy" ),
   ( "#2d1827", "dark mauve" ),
@@ -44,6 +44,7 @@ catalog = [
   ( "#a5c0b3", "seaton" ),
   ( "#ab4e83", "magenta" ),
   ( "#ad5d66", "bordeau" ),
+  ( "#ffffff", "white" ),
   ( "#add2d2", "teal" ),
   ( "#b72d69", "fushia" ),
   ( "#bc5256", "terra cotta" ),
@@ -80,6 +81,5 @@ catalog = [
   ( "#fcf7e9", "natural" ),
   ( "#fde8e8", "pale rose" ),
   ( "#ffe680", "chamois" ),
-  ( "#ffebeb", "peach" ),
-  ( "#ffffff", "white" )
+  ( "#ffebeb", "peach" )
   ]
