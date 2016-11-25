@@ -1,4 +1,4 @@
-module Modle exposing (..)
+module Model exposing (..)
 
 import Dict exposing ( Dict, fromList, insert )
 import Array exposing ( Array )

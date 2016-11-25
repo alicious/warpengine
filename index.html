@@ -1,13 +1,37 @@
-<div id="warp"></div>
-<script src="warp.js"></script>
-<script>
-    var node = document.getElementById('warp');
-    var app = Elm.Warp.embed(node);
-    app.ports.paletteChange.subscribe(function (id) {
-      console.log(id);
-    });
-    app.ports.warpChange.subscribe(function (warp) {
-      console.log(warp);
-    });
+<!doctype html>
 
-</script>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+
+    <title>Cat's Cradle Chromatic</title>
+    <meta name="description" content="Palette to Warp">
+    <meta name="author" content="Cat's Cradle Textiles">
+    <meta name="viewport" content="width=500, initial-scale=1">
+
+
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+
+<body>
+
+  <div id="warp"></div>
+
+  <script src="warp.js"></script>
+  <script>
+      var node = document.getElementById('warp');
+      var app = Elm.Warp.embed(node);
+      app.ports.paletteChange.subscribe(function (id) {
+        console.log(id);
+      });
+      app.ports.warpChange.subscribe(function (warp) {
+        console.log(warp);
+      });
+  </script>
+
+</body>
+</html>

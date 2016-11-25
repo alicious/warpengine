@@ -8,13 +8,14 @@ import Dict exposing ( Dict, fromList, insert )
 import Array exposing ( Array )
 import Json.Decode as Decoder
 import Regex
+import Task
 
 import Style 
 import MB
 import DoubleSide 
 import AmethystMary
 import Ports
-import Modle exposing (..)
+import Model exposing (..)
 
 -- MODEL
 
@@ -65,7 +66,7 @@ initModel =
     , selectedPalette = 0
     , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB ] )
     , selectedTemplate = 0
-    , window = { height = 0, width = 800 }
+    , window = { height = 0, width = 0 }
     } 
 
 init : ( Model, Cmd Msg )
