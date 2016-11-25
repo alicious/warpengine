@@ -1,11 +1,10 @@
-port module Ports exposing (..)
+port module Ports exposing (warpChange, modelToChange)
 import Array exposing ( Array )
 import Dict exposing ( Dict )
 
 import Model exposing (..)
 
-port paletteChange : PaletteMsg -> Cmd msg
-port warpChange    : Warp       -> Cmd msg
+port warpChange : (Warp, PaletteMsg) -> Cmd msg
 
 
 type alias PaletteMsgEntry =
@@ -15,6 +14,9 @@ type alias PaletteMsg =
   List PaletteMsgEntry
 
 
+modelToChange : Model -> ( Warp, PaletteMsg )
+modelToChange modle =
+    ( modle.warp, paletteToMsg modle.palette )
       
 paletteToMsg : Palette -> PaletteMsg
 paletteToMsg palette =

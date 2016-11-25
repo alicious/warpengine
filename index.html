@@ -18,20 +18,11 @@
 
 
 <body>
-
+  <div id="canvas-container">
+    <canvas id="canvas" height="200"></canvas>
+  </div>
   <div id="warp"></div>
-
   <script src="warp.js"></script>
-  <script>
-      var node = document.getElementById('warp');
-      var app = Elm.Warp.embed(node);
-      app.ports.paletteChange.subscribe(function (id) {
-        console.log(id);
-      });
-      app.ports.warpChange.subscribe(function (warp) {
-        console.log(warp);
-      });
-  </script>
-
+  <script src="draw.js"></script>
 </body>
 </html>

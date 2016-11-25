@@ -57,7 +57,7 @@ jsonToArray string =
 
 initModel : Model
 initModel =
-  let ( warpB, warpA ) = 
+  let ( warpA, warpB ) = 
     ( initWarp DoubleSide.warp, initWarp AmethystMary.warp )
   in
     { warp = warpA
@@ -70,7 +70,7 @@ initModel =
 init : ( Model, Cmd Msg )
 init =
     let model = initModel in
-    ( model, Ports.warpChange model.warp )
+    ( model, Ports.warpChange (Ports.modelToChange model) )
 
 codifyPalette : Palette -> String
 codifyPalette palette = 
@@ -197,14 +197,15 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of 
     UpdatePalette paletteCode ->
-        let newModle = updatePalette paletteCode model in        
-          ( newModle, Ports.paletteChange (Ports.paletteToMsg newModle.palette) )
+        let newModel = updatePalette paletteCode model in        
+          ( newModel, Ports.warpChange (Ports.modelToChange newModel) )
     ChangePaletteEntry hex name ->
-      ( { model | palette = 
-        insert model.selectedPalette { hex = hex, name = name } model.palette
-        }
-      , Ports.paletteChange (Ports.paletteToMsg model.palette)
-      )  
+        let newModle =
+          { model | palette = 
+            insert model.selectedPalette { hex = hex, name = name } model.palette
+          }
+        in
+          ( newModle, Ports.warpChange (Ports.modelToChange newModle) )  
     UpdateSelectedPalette index ->
       ( { model | selectedPalette = index }, Cmd.none )
 
