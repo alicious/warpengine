@@ -3,7 +3,6 @@ module Warp exposing (..)
 import Html exposing ( Html, button, div, text, select, option, input )
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick, onInput )
-import Window
 import Dict exposing ( Dict, fromList, insert )
 import Array exposing ( Array )
 import Json.Decode as Decoder
@@ -58,7 +57,7 @@ jsonToArray string =
 
 initModel : Model
 initModel =
-  let ( warpA, warpB ) = 
+  let ( warpB, warpA ) = 
     ( initWarp DoubleSide.warp, initWarp AmethystMary.warp )
   in
     { warp = warpA
@@ -66,7 +65,6 @@ initModel =
     , selectedPalette = 0
     , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB ] )
     , selectedTemplate = 0
-    , window = { height = 0, width = 0 }
     } 
 
 init : ( Model, Cmd Msg )
@@ -142,14 +140,9 @@ view model =
           ]
     ]
 
-threadSize : Model -> ( Float, Float )
+threadSize : Model -> Float
 threadSize model = 
-  let ( width, ends ) = 
-    ( toFloat model.window.width
-    , toFloat ( Array.length model.warp.warpColors )
-    )
-  in
-    ( 100, ( width - 40 ) / ends )
+  100 / ( toFloat ( Array.length model.warp.warpColors ) )
   
 drawThread : Model -> Int -> Html Msg
 drawThread model colorIndex =
@@ -197,7 +190,6 @@ type Msg
   = UpdatePalette String
   | ChangePaletteEntry String String
   | UpdateSelectedPalette Int
-  | Resize Int Int 
 
 
 
@@ -217,9 +209,6 @@ update msg model =
       )  
     UpdateSelectedPalette index ->
       ( { model | selectedPalette = index }, Cmd.none )
-    Resize height width ->
-      ( { model | window = { height = height, width = width } }, Cmd.none )
-
 
 
 updatePalette : String -> Model -> Model
@@ -237,7 +226,7 @@ updatePalette paletteCode model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Window.resizes (\{height, width} -> Resize height width)
+  Sub.none
 
 
 
