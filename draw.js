@@ -11,7 +11,10 @@ function main () {
 
     // Subscrib to messages from elm to draw warp
     app.ports.warpChange.subscribe(function (data) {
-        draw(data[0], data[1]);
+        // Wait for the next browser call to do the paint
+        requestAnimationFrame(function() {
+            draw(data[0], data[1]);
+        });
     });
 
     // Get canvas element and the drawing context
@@ -62,27 +65,28 @@ function main () {
         var translate = (threadWidth % 2) / 2;
         ctx.translate(translate, translate);
 
-        // clear the canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+        // Fill the canvas with the weft color
+        ctx.fillStyle = "#000000"; //BOOG colors[ weftthreads[j] ].hex;
+	ctx.fillRect( 0, 0, canvas.width, canvas.height );
+        
         for ( var j = 0 ; j < treadling.length ; j++ ) {
             var wOffset = j * threadWidth;
+            var shafts  = tieup[treadling[j] - 1];
 
 	    for ( var i = 0 ; i < threads.length ; i++ ) {
 	        var offset = i * threadWidth;
 
                 var shaft = threading[i];
-                var shafts = tieup[treadling[j] - 1];
 
-                var fillColor;
                 if (contains( shaft, shafts ))
-                    fillColor = "#000000"; //BOOG colors[ weftthreads[j] ].hex;
-                else
-                    fillColor = colors[ threads[ i ] ].hex;
+                    continue;
+                else {
+                    var fillColor = colors[ threads[ i ] ].hex;
 
-                // Draw pixel
-                ctx.fillStyle = fillColor
-	        ctx.fillRect( offset, wOffset, threadWidth, threadWidth );
+                    // Draw pixel
+                    ctx.fillStyle = fillColor
+	            ctx.fillRect( offset, wOffset, threadWidth, threadWidth );
+                }
 	    }
         }    
     }
