@@ -6,6 +6,7 @@ import Html.Events exposing ( onClick, onInput )
 import Dict exposing ( Dict, fromList, insert )
 import Array exposing ( Array )
 import Json.Decode as Decoder
+import Window
 import Regex
 import Task
 
@@ -188,6 +189,7 @@ type Msg
   = UpdatePalette String
   | ChangePaletteEntry String String
   | UpdateSelectedPalette Int
+  | Resize
 
 
 
@@ -208,6 +210,8 @@ update msg model =
           ( newModle, Ports.warpChange (Ports.modelToChange newModle) )  
     UpdateSelectedPalette index ->
       ( { model | selectedPalette = index }, Cmd.none )
+    Resize ->
+      ( model, Ports.warpChange (Ports.modelToChange model) )
 
 
 updatePalette : String -> Model -> Model
@@ -225,7 +229,7 @@ updatePalette paletteCode model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+  Window.resizes ( \{height, width} -> Resize )
 
 
 
