@@ -15,16 +15,22 @@ body {
   margin-top: 10px;
 }
 
+.palette-control-right {
+  float: right;
+  overflow: hidden;
+  font-size: 12px;
+  margin-right: 30px;
+}
+
 .weft-label {
   float: left;
   margin-top: 15px;
 }
 
-.weft-palette {
-  float: right;
-  overflow: hidden;
-  font-size: 12px;
-  margin-right: 30px;
+.warp-template-select {
+  float: left;
+  font-size: 10px;
+  margin-top: 14px;
 }
 
 .warp-palette {
@@ -46,5 +52,4 @@ body {
 input.shareAndImport {
   margin-top: 30px;
   font-size: 10px;
-  width: 390px;
 }

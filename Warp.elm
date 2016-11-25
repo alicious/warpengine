@@ -5,7 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick, onInput )
 import Dict exposing ( Dict, fromList, insert )
 import Array exposing ( Array )
-import Json.Decode as Decoder
+import Json.Decode as Json 
 import Window
 import Regex
 import Task
@@ -14,6 +14,8 @@ import Style
 import MB
 import DoubleSide 
 import AmethystMary
+import LandOfEnchantment
+
 import Ports
 import Model exposing (..)
 
@@ -52,20 +54,21 @@ initPalette =
 
 jsonToArray : String -> Array Int
 jsonToArray string =
-  case Decoder.decodeString ( Decoder.array Decoder.int ) string of
+  case Json.decodeString ( Json.array Json.int ) string of
   Ok value -> value
   Err _ -> Array.empty
 
-
 initModel : Model
 initModel =
-  let ( warpA, warpB ) = 
-    ( initWarp DoubleSide.warp, initWarp AmethystMary.warp )
+  let ( warpA, warpB, warpC ) = 
+    ( initWarp DoubleSide.warp
+    , initWarp AmethystMary.warp
+    , initWarp LandOfEnchantment.warp )
   in
     { warp = warpA
     , palette = initPalette
     , selectedPalette = 1
-    , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB ] )
+    , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB, warpC ] )
     , selectedTemplate = 0
     } 
 
@@ -117,7 +120,7 @@ hexMatches target ( hex, name ) =
 view : Model -> Html Msg
 view model =
   div [ style Style.body ]
-  {--
+  {--  BASIC COLORPLAN VIEW
     [ div [ style Style.container ]
         ( model.warp.warpColors
           |> Array.map ( drawThread model )
@@ -126,11 +129,19 @@ view model =
   --}
     [ div [ style Style.container ]
       [ div [ class "palette-controls" ]
-        [ div [ class "weft-palette" ]
+        [ div [ class "palette-control-right" ]
           [ div [ class "weft-label" ] [ text "weft color: " ]
           , model.palette
             |> weftPaletteEntry
             |> makePaletteEntry model.selectedPalette
+          , select [ class "warp-template-select" 
+                   , Html.Events.on "change" 
+                   ( Json.map ChangeTemplate Html.Events.targetValue )
+                   ] 
+                     [ option [ value "0" ] [ text "BeSides" ]
+                     , option [ value "1" ] [ text "Amethyst Mary" ]
+                     , option [ value "2" ] [ text "Land of Enchantment" ]
+                     ]
           ]
         , div [ class "warp-palette" ]
           ( warpPaletteList model.palette
@@ -144,6 +155,7 @@ view model =
           [ input [ class "shareAndImport"
                   , onInput ( UpdatePalette ) 
                   , value ( codifyPalette model.palette )
+                  , size 88 
                   ]
                   []
           ]
@@ -211,6 +223,7 @@ type Msg
   | ChangePaletteEntry String String
   | UpdateSelectedPalette Int
   | Resize
+  | ChangeTemplate String 
 
 
 
@@ -223,17 +236,25 @@ update msg model =
         let newModel = updatePalette paletteCode model in        
           ( newModel, Ports.warpChange (Ports.modelToChange newModel) )
     ChangePaletteEntry hex name ->
-        let newModle =
+        let newModel =
           { model | palette = 
             insert model.selectedPalette { hex = hex, name = name } model.palette
           }
         in
-          ( newModle, Ports.colorChange (Ports.modelToColorChange newModle) )  
+          ( newModel, Ports.colorChange (Ports.modelToColorChange newModel) )  
     UpdateSelectedPalette index ->
       ( { model | selectedPalette = index }, Cmd.none )
     Resize ->
       ( model, Ports.warpChange (Ports.modelToChange model) )
-
+    ChangeTemplate index -> 
+      let newModel = 
+        { model | warp = 
+            case Dict.get ( String.toInt index |> Result.toMaybe |> Maybe.withDefault 0 ) model.warpTemplates of
+              Nothing -> model.warp
+              Just warp -> warp 
+        }
+      in
+        ( newModel, Ports.warpChange (Ports.modelToChange newModel) )
 
 updatePalette : String -> Model -> Model
 updatePalette paletteCode model =
