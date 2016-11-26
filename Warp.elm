@@ -91,7 +91,7 @@ decodePalette paletteCode =
     |> String.split "&"
     |> List.filter ( Regex.contains ( Regex.regex "^#[0-9a-f]{6}" ) )
   in
-    case ( List.length hexList ) == 8 of
+    case ( List.length hexList ) == 9 of
     True -> 
       hexList
       |> List.indexedMap paletteColorFromHex 
@@ -127,39 +127,43 @@ view model =
           |> Array.toList
         )
   --}
-    [ div [ style Style.container ]
-      [ div [ class "palette-controls" ]
-        [ div [ class "palette-control-right" ]
-          [ div [ class "weft-label" ] [ text "weft color: " ]
-          , model.palette
-            |> weftPaletteEntry
-            |> makePaletteEntry model.selectedPalette
-          , select [ class "warp-template-select" 
-                   , Html.Events.on "change" 
-                   ( Json.map ChangeTemplate Html.Events.targetValue )
-                   ] 
-                     [ option [ value "0" ] [ text "BeSides (cowl)" ]
-                     , option [ value "1" ] [ text "Land of Enchantment" ]
-                     , option [ value "2" ] [ text "Undulating Twill" ]
-                     ]
-          ]
-        , div [ class "warp-palette" ]
-          ( warpPaletteList model.palette
-            |> List.map ( makePaletteEntry model.selectedPalette )
-          ) 
-        ]
+      [ div [ class "warp-palette-wrapper" ] 
+          [ div [ class "warp-palette" ]
+            ( warpPaletteList model.palette
+              |> List.map ( makePaletteEntry model.selectedPalette )
+            ) 
+          ]  
       , div [ class "colorCatalog" ]
           ( List.map ( makeSwatch model ) MB.catalog )
-      ]
-    , div [] 
-          [ input [ class "shareAndImport"
-                  , onInput ( UpdatePalette ) 
-                  , value ( codifyPalette model.palette )
-                  , size 88 
-                  ]
-                  []
+      , div [ class "weft-and-template-wrapper" ]
+          [ div [ class "weft-and-template" ]
+            [ div [ class "warp-template" ] 
+              [ div [ class "control-label" ] [ text "blueprint:" ]
+              , select [ class "warp-template-select" 
+                       , Html.Events.on "change" 
+                         ( Json.map ChangeTemplate Html.Events.targetValue )
+                       ] 
+                         [ option [ value "0" ] [ text "BeSides (cowl)" ]
+                         , option [ value "1" ] [ text "Land of Enchantment" ]
+                         , option [ value "2" ] [ text "Undulating Twill" ]
+                         ]
+              ]
+            , div [ class "weft-color" ]
+              [ div [ class "control-label" ] [ text "weft color: " ]
+              , model.palette
+                |> weftPaletteEntry
+                |> makePaletteEntry model.selectedPalette
+              ]
+            ]
           ]
-    ]
+      , div [ class "shareAndImport" ] 
+            [ div [ class "control-label" ] [ text "copy/paste to share:" ]
+            , input [ onInput ( UpdatePalette ) 
+                    , value ( codifyPalette model.palette )
+                    ]
+                    []
+            ]
+      ]
 
 weftPaletteEntry : Palette -> ( Int, PaletteColor )
 weftPaletteEntry palette =
@@ -199,7 +203,7 @@ makePaletteEntry : Int -> ( Int, PaletteColor ) -> Html Msg
 makePaletteEntry current ( index, color ) =
   let selected = current == index
   in
-    div [ style Style.paletteEntry ]
+    div [ class "paletteEntry" ]
     [ makePaletteButton index color.hex selected
     ]
 
@@ -263,7 +267,7 @@ updatePalette paletteCode model =
       Just palette ->
         { model | palette = palette }
       Nothing ->
-        model
+        { model | palette = Dict.empty }
     
 
 -- SUBSCRIPTIONS

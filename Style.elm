@@ -22,13 +22,6 @@ paletteInput =
   , ( "margin-left", "2px" )
   ]
 
-paletteEntry = 
-  [ ( "float", "left" )
-  , ( "margin", "10px" )
-  , ( "overflow", "hidden" )
-  , ( "font-size", "11px" )
-  ]
-
 swatch : String -> Bool -> List ( String, String )
 swatch color selected = 
   let borderColor =
