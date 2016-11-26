@@ -14,6 +14,7 @@ import Style
 import MB
 import DoubleSide 
 import LandOfEnchantment
+import AmethystMary
 
 import Ports
 import Model exposing (..)
@@ -39,7 +40,7 @@ initWarp warp =
 initPalette : Palette
 initPalette =
   fromList
-  [ ( 0, { hex = "#666666", name = "grey" } )
+  [ ( 0, { hex = "#928c87", name = "dark grey" } )
   , ( 1, { hex = "#7b5b6b", name = "plum" } )
   , ( 2, { hex = "#928c87", name = "dark grey" } )
   , ( 3, { hex = "#dbc5a4", name = "flax" } )
@@ -59,14 +60,15 @@ jsonToArray string =
 
 initModel : Model
 initModel =
-  let ( warpA, warpB ) = 
+  let ( warpA, warpB, warpC ) = 
     ( initWarp DoubleSide.warp
-    , initWarp LandOfEnchantment.warp )
+    , initWarp LandOfEnchantment.warp 
+    , initWarp AmethystMary.warp )
   in
     { warp = warpA
     , palette = initPalette
     , selectedPalette = 1
-    , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB ] )
+    , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB, warpC ] )
     , selectedTemplate = 0
     } 
 
@@ -138,6 +140,7 @@ view model =
                    ] 
                      [ option [ value "0" ] [ text "BeSides (cowl)" ]
                      , option [ value "1" ] [ text "Land of Enchantment" ]
+                     , option [ value "2" ] [ text "Undulating Twill" ]
                      ]
           ]
         , div [ class "warp-palette" ]
