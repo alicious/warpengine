@@ -119,7 +119,7 @@ hexMatches target ( hex, name ) =
 
 view : Model -> Html Msg
 view model =
-  div [ style Style.body ]
+  div []
   {--  BASIC COLORPLAN VIEW
     [ div [ style Style.container ]
         ( model.warp.warpColors

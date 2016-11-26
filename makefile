@@ -9,7 +9,8 @@ www: elm
 	mkdir -p www
 	mkdir -p www/js 
 	mkdir -p www/css
-	cp -r index.html js css www
+	mkdir -p www/images
+	cp -r index.html js css images www
 
 server: www 
 	cd www && python -m SimpleHTTPServer 8000

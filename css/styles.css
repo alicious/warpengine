@@ -1,6 +1,29 @@
 body {
   margin: 20px;
   text-align: center;
+  font-family: 'Raleway', sans-serif;
+}
+
+#page-title {
+  font-size: 18px;
+  width: 100%;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+#page-title div {
+  width: 230px;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#page-title img, #page-title span {
+  float: left;
+}
+
+#page-title span {
+  margin: 5px 0 0 5px;
 }
 
 #warp, #canvas-container {
@@ -99,4 +122,5 @@ body {
   margin-left: 7px;
   width: 350px;
   font-size: 8px;
+  margin-bottom: 20px;
 }
