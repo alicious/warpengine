@@ -13,7 +13,6 @@ import Task
 import Style 
 import MB
 import DoubleSide 
-import AmethystMary
 import LandOfEnchantment
 
 import Ports
@@ -60,15 +59,14 @@ jsonToArray string =
 
 initModel : Model
 initModel =
-  let ( warpA, warpB, warpC ) = 
+  let ( warpA, warpB ) = 
     ( initWarp DoubleSide.warp
-    , initWarp AmethystMary.warp
     , initWarp LandOfEnchantment.warp )
   in
     { warp = warpA
     , palette = initPalette
     , selectedPalette = 1
-    , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB, warpC ] )
+    , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB ] )
     , selectedTemplate = 0
     } 
 
@@ -138,9 +136,8 @@ view model =
                    , Html.Events.on "change" 
                    ( Json.map ChangeTemplate Html.Events.targetValue )
                    ] 
-                     [ option [ value "0" ] [ text "BeSides" ]
-                     , option [ value "1" ] [ text "Amethyst Mary" ]
-                     , option [ value "2" ] [ text "Land of Enchantment" ]
+                     [ option [ value "0" ] [ text "BeSides (cowl)" ]
+                     , option [ value "1" ] [ text "Land of Enchantment" ]
                      ]
           ]
         , div [ class "warp-palette" ]
