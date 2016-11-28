@@ -111,7 +111,7 @@ decodeDesign designCode =
     ( String.left 1 designCode, String.dropLeft 2 designCode )
   in 
     ( Result.withDefault 0 ( String.toInt index )
-    , Maybe.withDefault Dict.empty ( decodePalette paletteCode )
+    , Maybe.withDefault initPalette ( decodePalette paletteCode )
     )
   
 paletteColorFromHex : Int -> String -> ( Int, PaletteColor )
