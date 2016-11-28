@@ -188,7 +188,7 @@ view model =
                     ] []
             ]
       , div [ class "debug" ] 
-        [ text model.debug ]
+        []
       ]
 
 templateOption : Int -> ( Int, Warp ) -> Html Msg
