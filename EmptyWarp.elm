@@ -1,7 +1,8 @@
 module WarpName exposing (..)
 
 warp = 
-  { warpColors =
+  { name = "Warp Name" 
+  , warpColors =
     "[]"
 
   , threading = 

@@ -82,7 +82,7 @@ function main () {
 
         if ( index === undefined ) {
             // Fill the canvas with the weft color
-            ctx.fillStyle = colors[0].hex; //BOOG colors[ weftthreads[j] ].hex;
+            ctx.fillStyle = colors[0].hex; 
 	    ctx.fillRect( 0, 0, canvas.width, canvas.height );
         }
         

@@ -10,14 +10,25 @@ type alias Model =
   , selectedPalette : Int 
   , warpTemplates : Dict Int Warp
   , selectedTemplate : Int
+  , debug : String
   }
 
-type alias Warp = { warpColors : Array Int
+type alias Warp = { name : String
+                  , warpColors : Array Int
                   , threading : Array Int
                   , treadling : Array Int
                   , weftColors : Array Int
                   , tieup : List ( List Int )
                   } 
+
+type alias WarpData =
+  { name : String
+  , threading : String
+  , tieup : List (List Int)
+  , treadling : String
+  , warpColors : String
+  , weftColors : String
+  }
 
 type alias Palette = Dict Int PaletteColor 
 

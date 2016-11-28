@@ -3,6 +3,8 @@ module Warp exposing (..)
 import Html exposing ( Html, button, div, text, select, option, input )
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick, onInput )
+import Navigation
+import UrlParser as Url exposing ( (<?>), stringParam )
 import Dict exposing ( Dict, fromList, insert )
 import Array exposing ( Array )
 import Json.Decode as Json 
@@ -12,7 +14,7 @@ import Task
 
 import Style 
 import MB
-import DoubleSide 
+import BeSides 
 import LandOfEnchantment
 import AmethystMary
 
@@ -21,16 +23,10 @@ import Model exposing (..)
 
 -- MODEL
 
-initWarp : { a
-              | threading : String
-              , tieup : List (List Int)
-              , treadling : String
-              , warpColors : String
-              , weftColors : String
-            } 
-            -> Warp
+initWarp : WarpData -> Warp
 initWarp warp =
-  { warpColors = jsonToArray warp.warpColors
+  { name = warp.name
+  , warpColors = jsonToArray warp.warpColors
   , threading = jsonToArray warp.threading
   , treadling = jsonToArray warp.treadling
   , weftColors = jsonToArray warp.weftColors
@@ -51,6 +47,33 @@ initPalette =
   , ( 8, { hex = "#4d4d33", name = "taupe" } )
   ]
 
+initTemplates : Dict Int Warp
+initTemplates = 
+  [ BeSides.warp, LandOfEnchantment.warp, AmethystMary.warp ]
+  |> List.map initWarp
+  |> List.indexedMap (,)
+  |> fromList
+
+initModel : Navigation.Location -> Model
+initModel location =
+  let ( templateId, palette ) = 
+    case Url.parseHash Url.string location of
+      Just params -> decodeDesign params
+      Nothing -> ( 0, initPalette ) 
+  in
+    { warp = ( Maybe.withDefault ( initWarp BeSides.warp ) 
+              ( Dict.get templateId initTemplates ) )
+    , palette = palette
+    , selectedPalette = 1
+    , warpTemplates = initTemplates 
+    , selectedTemplate = templateId
+    , debug = "0"
+    } 
+
+init : Navigation.Location -> ( Model, Cmd Msg )
+init location =
+    let model = initModel location in
+    ( model, Ports.warpChange (Ports.modelToChange model) )
 
 jsonToArray : String -> Array Int
 jsonToArray string =
@@ -58,37 +81,20 @@ jsonToArray string =
   Ok value -> value
   Err _ -> Array.empty
 
-initModel : Model
-initModel =
-  let ( warpA, warpB, warpC ) = 
-    ( initWarp DoubleSide.warp
-    , initWarp LandOfEnchantment.warp 
-    , initWarp AmethystMary.warp )
-  in
-    { warp = warpA
-    , palette = initPalette
-    , selectedPalette = 1
-    , warpTemplates = fromList ( List.indexedMap (,) [ warpA, warpB, warpC ] )
-    , selectedTemplate = 0
-    } 
-
-init : ( Model, Cmd Msg )
-init =
-    let model = initModel in
-    ( model, Ports.warpChange (Ports.modelToChange model) )
-
 codifyPalette : Palette -> String
 codifyPalette palette = 
   palette
   |> Dict.values
   |> List.map .hex
-  |> String.join "&"
+  |> List.map ( String.dropLeft 1 )
+  |> String.join "."
 
 decodePalette : String -> Maybe Palette
 decodePalette paletteCode =
   let hexList = 
     paletteCode
-    |> String.split "&"
+    |> String.split "."
+    |> List.map ( String.cons '#' )
     |> List.filter ( Regex.contains ( Regex.regex "^#[0-9a-f]{6}" ) )
   in
     case ( List.length hexList ) == 9 of
@@ -99,6 +105,14 @@ decodePalette paletteCode =
       |> Just
     False -> Nothing
     
+decodeDesign : String -> ( Int, Palette )
+decodeDesign designCode = 
+  let ( index, paletteCode ) =  
+    ( String.left 1 designCode, String.dropLeft 2 designCode )
+  in 
+    ( Result.withDefault 0 ( String.toInt index )
+    , Maybe.withDefault Dict.empty ( decodePalette paletteCode )
+    )
   
 paletteColorFromHex : Int -> String -> ( Int, PaletteColor )
 paletteColorFromHex index hex = 
@@ -140,13 +154,14 @@ view model =
             [ div [ class "warp-template" ] 
               [ div [ class "control-label" ] [ text "blueprint:" ]
               , select [ class "warp-template-select" 
-                       , Html.Events.on "change" 
-                         ( Json.map ChangeTemplate Html.Events.targetValue )
-                       ] 
-                         [ option [ value "0" ] [ text "BeSides (cowl)" ]
-                         , option [ value "1" ] [ text "Land of Enchantment" ]
-                         , option [ value "2" ] [ text "Undulating Twill" ]
-                         ]
+                , Html.Events.on "change" 
+                  ( Json.map ChangeTemplate Html.Events.targetValue )
+                ] 
+                ( model.warpTemplates
+                  |> Dict.toList 
+                  |> List.map ( templateOption model.selectedTemplate )
+                )
+
               ]
             , div [ class "weft-color" ]
               [ div [ class "control-label" ] [ text "weft color: " ]
@@ -157,13 +172,21 @@ view model =
             ]
           ]
       , div [ class "shareAndImport" ] 
-            [ div [ class "control-label" ] [ text "copy/paste to share:" ]
-            , input [ onInput ( UpdatePalette ) 
-                    , value ( codifyPalette model.palette )
-                    ]
-                    []
+            [ div [ class "control-label" ] [ text "share link:" ]
+            , input [ class "share-link"
+                    ,  value ( "http://chromatic.catscradletextiles.com/#" 
+                                ++ toString model.selectedTemplate ++ "."
+                                ++ codifyPalette model.palette ) 
+                    ] []
             ]
+      , div [ class "debug" ] 
+        [ text model.debug ]
       ]
+
+templateOption : Int -> ( Int, Warp ) -> Html Msg
+templateOption selectedTemplate ( index,  warp ) = 
+  option [ value ( toString index )
+  , selected ( selectedTemplate == index ) ] [ text warp.name ]
 
 weftPaletteEntry : Palette -> ( Int, PaletteColor )
 weftPaletteEntry palette =
@@ -223,11 +246,11 @@ makeSwatch model ( hexcolor, name ) =
 -- MESSAGES
 
 type Msg 
-  = UpdatePalette String
-  | ChangePaletteEntry String String
+  = ChangePaletteEntry String String
   | UpdateSelectedPalette Int
   | Resize
   | ChangeTemplate String 
+  | UrlChange Navigation.Location
 
 
 
@@ -236,9 +259,6 @@ type Msg
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of 
-    UpdatePalette paletteCode ->
-        let newModel = updatePalette paletteCode model in        
-          ( newModel, Ports.warpChange (Ports.modelToChange newModel) )
     ChangePaletteEntry hex name ->
         let newModel =
           { model | palette = 
@@ -253,22 +273,18 @@ update msg model =
     ChangeTemplate index -> 
       let newModel = 
         { model | warp = 
-            case Dict.get ( String.toInt index |> Result.toMaybe |> Maybe.withDefault 0 ) model.warpTemplates of
+            case Dict.get ( String.toInt index |> Result.withDefault 0 ) model.warpTemplates of
               Nothing -> model.warp
               Just warp -> warp 
+        , selectedTemplate = String.toInt index |> Result.withDefault 0
         }
       in
         ( newModel, Ports.warpChange (Ports.modelToChange newModel) )
+    UrlChange location ->
+      let model = initModel location
+      in ( model, Ports.warpChange ( Ports.modelToChange model ) )
 
-updatePalette : String -> Model -> Model
-updatePalette paletteCode model =
-  let newPalette = decodePalette paletteCode in 
-    case newPalette of
-      Just palette ->
-        { model | palette = palette }
-      Nothing ->
-        { model | palette = Dict.empty }
-    
+
 
 -- SUBSCRIPTIONS
 
@@ -281,9 +297,8 @@ subscriptions model =
 
 -- MAIN
 
-main : Program Never Model Msg
 main =
-  Html.program
+  Navigation.program UrlChange
     { init = init 
     , view = view
     , update = update

@@ -16,7 +16,7 @@ server: www
 	cd www && python -m SimpleHTTPServer 8000
 
 clean:
-	-rm -rf www cats-cradle-chromatic
+	-rm -rf www cats-cradle-chromatic elm-stuff
 
 deploy-base: www
 	-rm -rf cats-cradle-chromatic 
