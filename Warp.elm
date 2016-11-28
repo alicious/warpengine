@@ -14,9 +14,11 @@ import Task
 
 import Style 
 import MB
+
 import BeSides 
 import LandOfEnchantment
 import AmethystMary
+import CloseToHome
 
 import Ports
 import Model exposing (..)
@@ -49,7 +51,7 @@ initPalette =
 
 initTemplates : Dict Int Warp
 initTemplates = 
-  [ BeSides.warp, LandOfEnchantment.warp, AmethystMary.warp ]
+  [ BeSides.warp, LandOfEnchantment.warp, AmethystMary.warp, CloseToHome.warp ]
   |> List.map initWarp
   |> List.indexedMap (,)
   |> fromList
