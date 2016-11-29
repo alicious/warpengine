@@ -72,7 +72,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
-  width: 300px;
+  width: 250px;
 }
 
 .warp-template {
@@ -97,12 +97,17 @@ body {
   overflow: hidden;
   display: inline;
   float: right;
-  width: 70px;
+  width: 60px;
 }
 
 .weft-color div {
   float: left;
   overflow: hidden;
+}
+
+.control-label {
+  margin-right: 5px;
+  margin-top: 7px;
 }
 
 .control-label {

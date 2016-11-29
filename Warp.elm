@@ -160,8 +160,7 @@ view model =
       , div [ class "weft-and-template-wrapper" ]
           [ div [ class "weft-and-template" ]
             [ div [ class "warp-template" ] 
-              [ div [ class "control-label" ] [ text "blueprint:" ]
-              , select [ class "warp-template-select" 
+              [ select [ class "warp-template-select" 
                 , Html.Events.on "change" 
                   ( Json.map ChangeTemplate Html.Events.targetValue )
                 ] 
@@ -172,7 +171,7 @@ view model =
 
               ]
             , div [ class "weft-color" ]
-              [ div [ class "control-label" ] [ text "weft color: " ]
+              [ div [ class "control-label" ] [ text "weft: " ]
               , model.palette
                 |> weftPaletteEntry
                 |> makePaletteEntry model.selectedPalette
