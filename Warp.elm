@@ -222,7 +222,7 @@ drawThread model colorIndex =
 
 makePaletteButton : Int -> String -> Bool -> Html Msg 
 makePaletteButton index hexcolor selected =
-  button 
+  div
     [ class ( "paletteButton" ) 
     , onClick ( UpdateSelectedPalette index ) 
     , style ( Style.swatch hexcolor selected )
