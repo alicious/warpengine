@@ -32,7 +32,7 @@ swatch color selected =
   in
     [ ( "border", ( toString borderWidth) ++ "px solid " ++ borderColor )
     , ( "background-color", color )
-    , ( "width", toString ( 32 - 2*borderWidth ) ++ "px" )
-    , ( "height", toString ( 32 - 2*borderWidth ) ++ "px" )
+    , ( "width", toString ( 28 - 2*borderWidth ) ++ "px" )
+    , ( "height", toString ( 28 - 2*borderWidth ) ++ "px" )
     , ( "float", "left" )
     ]
