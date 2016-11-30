@@ -30,7 +30,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
-  max-width: 780px;
+  max-width: 768px;
 }
 
 .warp-palette-wrapper {
@@ -55,7 +55,13 @@ body {
 .colorCatalog {
   overflow: hidden;
   margin-top: 10px;
-  margin-left: 6px;
+}
+
+.selected-color-name {
+  overflow: hidden;
+  float: right;
+  font-size: 12px;
+  margin: 9px;
 }
 
 .paletteButton {

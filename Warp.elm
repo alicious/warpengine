@@ -156,7 +156,11 @@ view model =
             ) 
           ]  
       , div [ class "colorCatalog" ]
-          ( List.map ( makeSwatch model ) MB.catalog )
+          ( List.map ( makeSwatch model ) MB.catalog
+          ++ [ div [ class "selected-color-name" ] 
+               [ text ( colorName model.selectedPalette model.palette ) ]
+             ]
+          )
       , div [ class "weft-and-template-wrapper" ]
           [ div [ class "weft-and-template" ]
             [ div [ class "warp-template" ] 
@@ -190,6 +194,11 @@ view model =
         []
       ]
 
+colorName : Int -> Palette -> String
+colorName index palette = 
+  case Dict.get index palette of
+    Nothing -> "unknown"
+    Just paletteEntry -> paletteEntry.name
 templateOption : Int -> ( Int, Warp ) -> Html Msg
 templateOption selectedTemplate ( index,  warp ) = 
   option [ value ( toString index )
