@@ -40,11 +40,11 @@ initPalette : Palette
 initPalette =
   fromList
   [ ( 0, { hex = "#928c87", name = "dark grey" } )
-  , ( 1, { hex = "#7b5b6b", name = "plum" } )
+  , ( 1, { hex = "#7b5b6b", name = "mauve" } )
   , ( 2, { hex = "#928c87", name = "dark grey" } )
   , ( 3, { hex = "#dbc5a4", name = "flax" } )
   , ( 4, { hex = "#eabc7b", name = "honey" } )
-  , ( 5, { hex = "#d5ddda", name = "pale grey" } )
+  , ( 5, { hex = "#c8cecc", name = "pale grey" } )
   , ( 6, { hex = "#a5c0b3", name = "seaton" } )
   , ( 7, { hex = "#6f8545", name = "lime" } )
   , ( 8, { hex = "#4d4d33", name = "taupe" } )
