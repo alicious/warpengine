@@ -40,7 +40,6 @@ body {
 }
 
 .warp-palette {
-  overflow: hidden;
   padding-top: 10px;
   margin-left: auto;
   margin-right: auto;
@@ -51,6 +50,7 @@ body {
   float: left;
   margin: 7px;
   width: 28px;
+  margin-bottom: 0;
 }
 
 .colorCatalog {
@@ -59,11 +59,10 @@ body {
 
 .selected-color-name {
   font-size: 12px;
-  position: relative;
-  left: -50%;
-  white-space: nowrap;
   clear: both;
-  top: 3px;
+  padding-top: 3px;
+  margin-left: -100%;
+  margin-right: -100%;
 }
 
 .paletteButton {
