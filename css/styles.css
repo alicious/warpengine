@@ -2,6 +2,7 @@ body {
   margin: 20px;
   text-align: center;
   font-family: 'Raleway', sans-serif;
+  background: #f0f0f0;
 }
 
 #page-title {
@@ -40,28 +41,29 @@ body {
 
 .warp-palette {
   overflow: hidden;
-  margin-top: 10px;
+  padding-top: 10px;
   margin-left: auto;
   margin-right: auto;
   display: inline-block;
 }
 
-.warp-palette .paletteEntry {
+.warp-palette .palette-entry {
   float: left;
   margin: 7px;
-  overflow: hidden;
+  width: 28px;
 }
 
 .colorCatalog {
   overflow: hidden;
-  margin-top: 10px;
 }
 
 .selected-color-name {
-  overflow: hidden;
-  float: right;
   font-size: 12px;
-  margin: 9px;
+  position: relative;
+  left: -50%;
+  white-space: nowrap;
+  clear: both;
+  top: 3px;
 }
 
 .paletteButton {

@@ -1,6 +1,6 @@
 module Warp exposing (..)
 
-import Html exposing ( Html, button, div, text, select, option, input )
+import Html exposing ( Html, button, div, text, select, option, input, span )
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick, onInput )
 import Navigation
@@ -157,9 +157,6 @@ view model =
           ]  
       , div [ class "colorCatalog" ]
           ( List.map ( makeSwatch model ) MB.catalog
-          ++ [ div [ class "selected-color-name" ] 
-               [ text ( colorName model.selectedPalette model.palette ) ]
-             ]
           )
       , div [ class "weft-and-template-wrapper" ]
           [ div [ class "weft-and-template" ]
@@ -242,8 +239,10 @@ makePaletteEntry : Int -> ( Int, PaletteColor ) -> Html Msg
 makePaletteEntry current ( index, color ) =
   let selected = current == index
   in
-    div [ class "paletteEntry" ]
+    div [ class "palette-entry" ]
     [ makePaletteButton index color.hex selected
+    , div [ class "selected-color-name" ] 
+      [ text ( if selected then color.name else "" ) ]
     ]
 
 makeSwatch : Model -> ( String, String ) -> Html Msg

@@ -24,15 +24,14 @@ paletteInput =
 
 swatch : String -> Bool -> List ( String, String )
 swatch color selected = 
-  let ( borderWidth, borderColor ) =
-    if selected && ( color /= "#000000" ) then ( 2, "#000000" ) 
-    else if selected then (2, "#666666" )
-    else if color == "#ffffff" then ( 1, "#cccccc" )
-    else ( 1, color )
+  let borderColor =
+    if selected && ( color /= "#000000" ) then "#000000" 
+    else if selected then "#666666"
+    else color
   in
-    [ ( "border", ( toString borderWidth) ++ "px solid " ++ borderColor )
+    [ ( "border", "2px solid " ++ borderColor )
     , ( "background-color", color )
-    , ( "width", toString ( 28 - 2*borderWidth ) ++ "px" )
-    , ( "height", toString ( 28 - 2*borderWidth ) ++ "px" )
+    , ( "width", "24px" )
+    , ( "height", "24px" )
     , ( "float", "left" )
     ]
