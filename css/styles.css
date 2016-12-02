@@ -107,7 +107,7 @@ body {
   float: left;
 }
 
-.weft-color-name, .control-label {
+.weft-color-name, .share-link {
   font-size: 10px;
 }
 
@@ -115,28 +115,34 @@ body {
   margin: 8px 0 0 3px;
 }
 
-.control-label {
+.shareAndImport {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: inline-block;
+}
+
+.share-link {
+  float: left;
   margin-right: 5px;
   margin-top: 7px;
 }
 
-.control-label {
-  margin-bottom: 5px;
-}
-
-.shareAndImport {
-  margin-top: 30px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 365px;
-}
-
 .shareAndImport input {
   float: left;
-  margin-left: 7px;
-  width: 350px;
+  width: 210px;
   font-size: 6px;
-  margin-bottom: 20px;
+  margin-top: 6px;
+}
+
+button.clipboard-copy {
+  float: left;
+  padding: 3px 3px 2px 5px;
+  border: 1px solid #a6a6a6;
+  background: #f8f8f8;
+  border-radius: 3px;
+  margin-left: 5px;
 }
 
 .btn-icon {
