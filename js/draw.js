@@ -24,11 +24,23 @@ function main () {
         });
     });
 
+    app.ports.setUrl.subscribe(function (data) {
+        // Wait for the next browser call to do the paint
+        requestAnimationFrame(function() {
+            window.location.hash = data;
+            document.getElementById("cpysrc").value = window.location;
+        });
+    });
+
+    
     // Get canvas element and the drawing context
     var canvas = document.getElementById("canvas");
     var ctx    = canvas.getContext("2d");
 
-  
+    // init clip board button
+    new Clipboard('.btn');
+
+    
     function drawAll ( warp, colors ) {
         drawColor( warp, colors, undefined );
     }

@@ -140,3 +140,7 @@ body {
   font-size: 6px;
   margin-bottom: 20px;
 }
+
+.btn-icon {
+    width: 15px;
+}

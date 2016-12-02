@@ -179,17 +179,15 @@ view model =
               ]
             ]
           ]
-      , div [ class "shareAndImport" ] 
-            [ div [ class "control-label" ] [ text "share link:" ]
-            , input [ class "share-link"
-                    ,  value ( "http://chromatic.catscradletextiles.com/#" 
-                                ++ toString model.selectedTemplate ++ "."
-                                ++ codifyPalette model.palette ) 
-                    ] []
-            ]
       , div [ class "debug" ] 
         []
       ]
+
+
+makeEncodedOptions : Model -> String
+makeEncodedOptions model =
+    toString model.selectedTemplate ++ "."
+    ++ codifyPalette model.palette
 
 colorName : Int -> Palette -> String
 colorName index palette = 
@@ -280,7 +278,9 @@ update msg model =
             insert model.selectedPalette { hex = hex, name = name } model.palette
           }
         in
-          ( newModel, Ports.colorChange (Ports.modelToColorChange newModel) )  
+          ( newModel, Cmd.batch [ Ports.colorChange (Ports.modelToColorChange newModel)
+                                , Ports.setUrl (makeEncodedOptions newModel)
+                                ] )  
     UpdateSelectedPalette index ->
       ( { model | selectedPalette = index }, Cmd.none )
     Resize ->
@@ -294,7 +294,9 @@ update msg model =
         , selectedTemplate = String.toInt index |> Result.withDefault 0
         }
       in
-        ( newModel, Ports.warpChange (Ports.modelToChange newModel) )
+        ( newModel, Cmd.batch [ Ports.warpChange (Ports.modelToChange newModel)
+                              , Ports.setUrl (makeEncodedOptions newModel)
+                              ])
     UrlChange location ->
       let model = initModel location
       in ( model, Ports.warpChange ( Ports.modelToChange model ) )

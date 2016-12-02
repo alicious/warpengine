@@ -1,4 +1,10 @@
-port module Ports exposing (colorChange, warpChange, modelToChange, modelToColorChange)
+port module Ports exposing ( colorChange
+                           , warpChange
+                           , setUrl
+                           , modelToChange
+                           , modelToColorChange
+                           )
+
 import Array exposing ( Array )
 import Dict exposing ( Dict )
 
@@ -6,7 +12,8 @@ import Model exposing (..)
 
 port warpChange  : ( Warp, PaletteMsg      ) -> Cmd msg
 port colorChange : ( Warp, PaletteMsg, Int ) -> Cmd msg
-
+port setUrl      : String                    -> Cmd msg
+                   
 type alias PaletteMsgEntry =
   { index : Int, hex : String, name : String }
 
@@ -20,7 +27,7 @@ modelToColorChange model =
 modelToChange : Model -> ( Warp, PaletteMsg )
 modelToChange model =
     ( model.warp, paletteToMsg model.palette )
-      
+        
 paletteToMsg : Palette -> PaletteMsg
 paletteToMsg palette =
   palette

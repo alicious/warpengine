@@ -11,6 +11,8 @@ www: elm
 	mkdir -p www/css
 	mkdir -p www/images
 	cp -r index.html js css images www
+	cp lib/clipboard.min.js www/js
+	cp -r assets/ www
 
 server: www 
 	cd www && python -m SimpleHTTPServer 8000

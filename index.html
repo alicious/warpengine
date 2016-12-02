@@ -32,6 +32,14 @@
     <canvas id="canvas" height="200"></canvas>
   </div>
   <div id="warp"></div>
+  <div class="shareAndImport">
+    <div class="control-label">share link:</div>
+    <input id="cpysrc" class="share-link">
+    <button class="btn" data-clipboard-target="#cpysrc">
+      <img class="btn-icon" src="assets/clippy.svg" alt="Copy to clipboard">
+    </button>
+  </div>
+  <script src="js/clipboard.min.js"></script>
   <script src="js/warp.js"></script>
   <script src="js/draw.js"></script>
 </body>
