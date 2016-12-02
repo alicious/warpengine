@@ -36,7 +36,7 @@ function main () {
     // Get canvas element and the drawing context
     var canvas = document.getElementById("canvas");
     var ctx    = canvas.getContext("2d");
-
+    
     // init clip board button
     new Clipboard('.btn');
 
@@ -84,6 +84,38 @@ function main () {
         // set canvas width and height
         canvas.width  = warpWidth;
         canvas.height = warpHeight;
+
+        // set it up so that we draw at the real dpi of the display
+        var devicePixelRatio
+            = window.devicePixelRatio || 1;
+
+        var backingStoreRatio
+            = ctx.backingStorePixelRatio ||
+            ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            1;
+
+        var ratio = devicePixelRatio / backingStoreRatio;
+        
+        // upscale the canvas if the two ratios don't match
+        if (devicePixelRatio !== backingStoreRatio) {
+
+            var oldWidth = canvas.width;
+            var oldHeight = canvas.height;
+
+            canvas.width = oldWidth * ratio;
+            canvas.height = oldHeight * ratio;
+
+            canvas.style.width = oldWidth + 'px';
+            canvas.style.height = oldHeight + 'px';
+
+            // now scale the context to counter
+            // the fact that we've manually scaled
+            // our canvas element
+            ctx.scale(ratio, ratio);
+        }
 
         // Adjust drawing possition to fill pixles exatly
         // avoiding blurry lines see:
