@@ -66,21 +66,6 @@ function main () {
         // default
         var warpHeight = 200; 
 
-        if ( threads.length != 0 ) {
-            threadWidth = warpWidth/threads.length;
-
-            // If we can make the thread width
-            // and intergern number of pixles
-            if ( threadWidth > 1 ) {
-                threadWidth = Math.floor(threadWidth);
-
-                // Reduce warp width to exatly fit threads
-                warpWidth = threadWidth * threads.length;
-            }
-
-            warpHeight = threadWidth * treadling.length;
-        }
-
         // set canvas width and height
         canvas.width  = warpWidth;
         canvas.height = warpHeight;
@@ -110,13 +95,32 @@ function main () {
 
             canvas.style.width = oldWidth + 'px';
             canvas.style.height = oldHeight + 'px';
-
-            // now scale the context to counter
-            // the fact that we've manually scaled
-            // our canvas element
-            ctx.scale(ratio, ratio);
         }
 
+        warpWidth = canvas.width;
+        
+        if ( threads.length != 0 ) {
+            threadWidth = warpWidth/threads.length;
+
+            console.log( "warpWidth %s threadWidth %s", warpWidth, threadWidth); //BOOG
+            // If we can make the thread width
+            // and intergern number of pixles
+            if ( threadWidth > 1 ) {
+                threadWidth = Math.floor(threadWidth);
+
+                // Reduce warp width to exatly fit threads
+                warpWidth = threadWidth * threads.length;
+            }
+
+            warpHeight = threadWidth * treadling.length;
+        }
+
+        canvas.style.width = warpWidth/ratio + 'px';
+        canvas.style.height = warpHeight/ratio + 'px';
+
+        canvas.width  = warpWidth;
+        canvas.height = warpHeight;
+        
         // Adjust drawing possition to fill pixles exatly
         // avoiding blurry lines see:
         //   http://www.mobtowers.com/html5-canvas-crisp-lines-every-time/
