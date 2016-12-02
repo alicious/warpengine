@@ -38,7 +38,7 @@ function main () {
     var ctx    = canvas.getContext("2d");
     
     // init clip board button
-    new Clipboard('.btn');
+    new Clipboard('.clipboard-copy');
 
     
     function drawAll ( warp, colors ) {
