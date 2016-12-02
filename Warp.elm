@@ -152,7 +152,7 @@ view model =
       [ div [ class "warp-palette-wrapper" ] 
           [ div [ class "warp-palette" ]
             ( warpPaletteList model.palette
-              |> List.map ( makePaletteEntry model.selectedPalette )
+              |> List.map ( makeWarpPaletteEntry model.selectedPalette )
             ) 
           ]  
       , div [ class "colorCatalog" ]
@@ -172,10 +172,9 @@ view model =
 
               ]
             , div [ class "weft-color" ]
-              [ div [ class "control-label" ] [ text "weft: " ]
-              , model.palette
+              [ model.palette
                 |> weftPaletteEntry
-                |> makePaletteEntry model.selectedPalette
+                |> makeWeftPaletteEntry model.selectedPalette
               ]
             ]
           ]
@@ -235,14 +234,24 @@ makePaletteButton index hexcolor selected =
     ] 
     []
 
-makePaletteEntry : Int -> ( Int, PaletteColor ) -> Html Msg
-makePaletteEntry current ( index, color ) =
+makeWarpPaletteEntry : Int -> ( Int, PaletteColor ) -> Html Msg
+makeWarpPaletteEntry current ( index, color ) =
   let selected = current == index
   in
     div [ class "palette-entry" ]
     [ makePaletteButton index color.hex selected
     , div [ class "selected-color-name" ] 
       [ text ( if selected then color.name else "" ) ]
+    ]
+
+makeWeftPaletteEntry : Int -> ( Int, PaletteColor ) -> Html Msg
+makeWeftPaletteEntry current ( index, color ) = 
+  let selected = current == index
+  in
+    div [ class "palette-entry" ] 
+    [ makePaletteButton index color.hex selected
+    , div [ class "weft-color-name" ]
+      [ text ( color.name ++ " weft" ) ]
     ]
 
 makeSwatch : Model -> ( String, String ) -> Html Msg
