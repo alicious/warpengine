@@ -81,7 +81,9 @@ initModel location =
 init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
     let model = initModel location in
-    ( model, Ports.warpChange (Ports.modelToChange model) )
+    ( model, Cmd.batch [ Ports.warpChange ( Ports.modelToChange model )
+                       , Ports.setUrl ( makeEncodedOptions model)
+                       ] )
 
 jsonToArray : String -> Array Int
 jsonToArray string =
