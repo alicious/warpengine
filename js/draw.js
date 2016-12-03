@@ -65,6 +65,22 @@ function main () {
 
         return ratio;
     }
+
+    function initBuffers ( warpWidth, warpHeight, colors ) {
+        colorBuffers = [];
+
+        for ( var i = 0 ; i < colors.length ; i++ ) {
+            var buf = document.createElement("canvas");
+            buf.width  = warpWidth;
+            buf.height = warpHeight;
+            var btx = buf.getContext('2d');
+
+            btx.fillStyle = "rgba(0,0,0,0)"; 
+	    btx.fillRect( 0, 0, warpWidth, warpWidth );
+            
+            colorBuffers.push(buf);
+        }
+    }
     
     function drawAll ( warp, colors ) {
         
@@ -92,28 +108,19 @@ function main () {
 
             warpWidth  *= ratio;
             warpHeight *= ratio;            
+
+            canvas.width = warpWidth;
+            canvas.height = warpHeight;
+
         }
 
 
-        colorBuffers = [];
-
-        for ( var i = 0 ; i < colors.length ; i++ ) {
-            var buf = document.createElement("canvas");
-            buf.width  = warpWidth;
-            buf.height = warpHeight;
-            var btx = buf.getContext('2d');
-
-            btx.fillStyle = "rgba(0,0,0,0)"; 
-	    btx.fillRect( 0, 0, warpWidth, warpWidth );
-            
-            colorBuffers.push(buf);
-        }
+        initBuffers( warpWidth, warpHeight, colors );
+        
         
         if ( threads.length != 0 )
             threadWidth = warpWidth/threads.length;
 
-        canvas.width = warpWidth;
-        canvas.height = warpHeight;
 
         // Adjust drawing possition to fill pixles exatly
         // avoiding blurry lines see:
@@ -134,7 +141,7 @@ function main () {
             var shaft      = threading[i];
             var colorIndex = threads[ i ];
 
-            buf = colorBuffers[ colorIndex ].getContext('2d');
+            var buf = colorBuffers[ colorIndex ].getContext('2d');
            
             buf.fillStyle = "#ffffff";
 
