@@ -66,9 +66,6 @@ function main () {
         // default
         var warpHeight = 200; 
 
-        // set canvas width and height
-        canvas.width  = warpWidth;
-        canvas.height = warpHeight;
 
         // set it up so that we draw at the real dpi of the display
         var devicePixelRatio
@@ -87,22 +84,21 @@ function main () {
         // upscale the canvas if the two ratios don't match
         if (devicePixelRatio !== backingStoreRatio) {
 
-            var oldWidth = canvas.width;
-            var oldHeight = canvas.height;
+            canvas.style.width = warpWidth + 'px';
+            canvas.style.height = warpHeight + 'px';
 
-            canvas.width = oldWidth * ratio;
-            canvas.height = oldHeight * ratio;
-
-            canvas.style.width = oldWidth + 'px';
-            canvas.style.height = oldHeight + 'px';
+            warpWidth  *= ratio;
+            warpHeight *= ratio;            
         }
 
-        warpWidth = canvas.width;
+
         
         if ( threads.length != 0 ) {
             threadWidth = warpWidth/threads.length;
 
             console.log( "warpWidth %s threadWidth %s", warpWidth, threadWidth); //BOOG
+
+            /*
             // If we can make the thread width
             // and intergern number of pixles
             if ( threadWidth > 1 ) {
@@ -111,16 +107,12 @@ function main () {
                 // Reduce warp width to exatly fit threads
                 warpWidth = threadWidth * threads.length;
             }
-
-            warpHeight = threadWidth * treadling.length;
+            */
         }
 
-        canvas.style.width = warpWidth/ratio + 'px';
-        canvas.style.height = warpHeight/ratio + 'px';
-
-        canvas.width  = warpWidth;
+        canvas.width = warpWidth;
         canvas.height = warpHeight;
-        
+
         // Adjust drawing possition to fill pixles exatly
         // avoiding blurry lines see:
         //   http://www.mobtowers.com/html5-canvas-crisp-lines-every-time/
@@ -133,10 +125,18 @@ function main () {
             ctx.fillStyle = colors[0].hex; 
 	    ctx.fillRect( 0, 0, canvas.width, canvas.height );
         }
+
+        var start = 0;
+
+        if ( treadling.length * threadWidth > warpHeight ) {
+            start = Math.ceil(treadling.length/2)
+                - Math.floor( warpHeight / threadWidth / 2 );
+        }
         
-        for ( var j = 0 ; j < treadling.length ; j++ ) {
-            var wOffset = j * threadWidth;
-            var shafts  = tieup[treadling[j] - 1];
+        for ( var j = 0 ; j < warpHeight ; j++ ) {
+            var wOffset        = j * threadWidth;
+            var treadlingIndex = (j + start) % treadling.length;
+            var shafts         = tieup[treadling[treadlingIndex] - 1];
 
 	    for ( var i = 0 ; i < threads.length ; i++ ) {
 	        var offset = i * threadWidth;
