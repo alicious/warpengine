@@ -20,6 +20,7 @@ import LandOfEnchantment
 import AmethystMary
 import CloseToHome
 import PWFade
+import Labyrinth
 
 import Ports
 import Model exposing (..)
@@ -57,6 +58,7 @@ initTemplates =
   , AmethystMary.warp
   , CloseToHome.warp
   , PWFade.warp
+  , Labyrinth.warp
   ]
   |> List.map initWarp
   |> List.indexedMap (,)
