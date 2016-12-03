@@ -309,7 +309,7 @@ update msg model =
                               , Ports.setUrl (makeEncodedOptions newModel)
                               ])
     UrlChange location ->
-      ( model, Ports.warpChange ( Ports.modelToChange model ) )
+      ( model, Cmd.none )
 
 
 
