@@ -13,14 +13,14 @@ function main () {
     app.ports.warpChange.subscribe(function (data) {
         // Wait for the next browser call to do the paint
         requestAnimationFrame(function() {
-            drawAll(data[0], data[1], undefined);
+            drawAll(data[0], data[1]);
         });
     });
 
     app.ports.colorChange.subscribe(function (data) {
         // Wait for the next browser call to do the paint
         requestAnimationFrame(function() {
-            drawColor(data[0], data[1], data[3]);
+            drawColor(data[1]);
         });
     });
 
@@ -36,37 +36,19 @@ function main () {
     // Get canvas element and the drawing context
     var canvas = document.getElementById("canvas");
     var ctx    = canvas.getContext("2d");
+
+    var colorBuffers = [];
     
     // init clip board button
     new Clipboard('.clipboard-copy');
-
     
-    function drawAll ( warp, colors ) {
-        drawColor( warp, colors, undefined );
-    }
-    
-    function drawColor ( warp, colors, index ) {
-        
-        var threading   = warp.threading;
-        var tieup       = warp.tieup;
-        var treadling   = warp.treadling;
-        var threads     = warp.warpColors;
-        var weftthreads = warp.weftColors;
-
-        var threadWidth = undefined;
-
-        // Make the width of the warp be the
-        // width of it's parent element.
-        var warpWidth =
-            canvas
+    function getBounds ( canvas ) {
+        return canvas
             .parentElement
-            .getBoundingClientRect()
-            .width;
+            .getBoundingClientRect();
+    }
 
-        // default
-        var warpHeight = 200; 
-
-
+    function getPixelRatio ( ) {
         // set it up so that we draw at the real dpi of the display
         var devicePixelRatio
             = window.devicePixelRatio || 1;
@@ -80,10 +62,31 @@ function main () {
             1;
 
         var ratio = devicePixelRatio / backingStoreRatio;
+
+        return ratio;
+    }
+    
+    function drawAll ( warp, colors ) {
+        
+        var threading   = warp.threading;
+        var tieup       = warp.tieup;
+        var treadling   = warp.treadling;
+        var threads     = warp.warpColors;
+        var weftthreads = warp.weftColors;
+
+        var threadWidth = undefined;
+
+        // Make the width of the warp be the
+        // width of it's parent element.
+        var bounds = getBounds( canvas );
+
+        var warpWidth  = bounds.width;
+        var warpHeight = 200; //bounds.height; 
+
+        var ratio = getPixelRatio();
         
         // upscale the canvas if the two ratios don't match
-        if (devicePixelRatio !== backingStoreRatio) {
-
+        if ( ratio !== 1 ) {
             canvas.style.width = warpWidth + 'px';
             canvas.style.height = warpHeight + 'px';
 
@@ -92,23 +95,22 @@ function main () {
         }
 
 
-        
-        if ( threads.length != 0 ) {
-            threadWidth = warpWidth/threads.length;
+        colorBuffers = [];
 
-            console.log( "warpWidth %s threadWidth %s", warpWidth, threadWidth); //BOOG
+        for ( var i = 0 ; i < colors.length ; i++ ) {
+            var buf = document.createElement("canvas");
+            buf.width  = warpWidth;
+            buf.height = warpHeight;
+            var btx = buf.getContext('2d');
 
-            /*
-            // If we can make the thread width
-            // and intergern number of pixles
-            if ( threadWidth > 1 ) {
-                threadWidth = Math.floor(threadWidth);
-
-                // Reduce warp width to exatly fit threads
-                warpWidth = threadWidth * threads.length;
-            }
-            */
+            btx.fillStyle = "rgba(0,0,0,0)"; 
+	    btx.fillRect( 0, 0, warpWidth, warpWidth );
+            
+            colorBuffers.push(buf);
         }
+        
+        if ( threads.length != 0 )
+            threadWidth = warpWidth/threads.length;
 
         canvas.width = warpWidth;
         canvas.height = warpHeight;
@@ -119,13 +121,7 @@ function main () {
         //
         var translate = (threadWidth % 2) / 2;
         ctx.translate(translate, translate);
-
-        if ( index === undefined ) {
-            // Fill the canvas with the weft color
-            ctx.fillStyle = colors[0].hex; 
-	    ctx.fillRect( 0, 0, canvas.width, canvas.height );
-        }
-
+        
         var start = 0;
 
         if ( treadling.length * threadWidth > warpHeight ) {
@@ -138,26 +134,49 @@ function main () {
             var shaft      = threading[i];
             var colorIndex = threads[ i ];
 
-            ctx.fillStyle = colors[ colorIndex ].hex
+            buf = colorBuffers[ colorIndex ].getContext('2d');
+           
+            buf.fillStyle = "#ffffff";
 
             for ( var j = 0 ; j < warpHeight ; j++ ) {
                 var wOffset        = j * threadWidth;
                 var treadlingIndex = (j + start) % treadling.length;
                 var shafts         = tieup[treadling[treadlingIndex] - 1];
 
-                // if we are drawnig just one color contine
-                // if this is not that color
-                if ( index !== undefined && colorIndex !== index )
-                    continue;
-
                 // continue if is is weft
                 if (contains( shaft, shafts ))
                     continue;
 
                 // Draw pixel
-	        ctx.fillRect( offset, wOffset, threadWidth, threadWidth );
+	        buf.fillRect( offset, wOffset, threadWidth, threadWidth );
 	    }
-        }    
+        }
+        
+        drawColor( colors );
+    }
+
+    function drawColor ( colors ) {
+
+        var width  = canvas.width;
+        var height = canvas.height;
+
+        // Fill the canvas with the weft color
+        ctx.fillStyle = colors[0].hex; 
+	ctx.fillRect( 0, 0, width, height );
+
+        for ( var i = 1; i < colors.length ; i++ ) {
+            var buf = colorBuffers[i];
+            var btx = buf.getContext('2d');
+            
+            btx.save();
+            btx.fillStyle = colors[i].hex;
+            btx.globalCompositeOperation = "source-in";
+            btx.fillRect(0, 0, width, height);
+            btx.restore();
+            
+            ctx.drawImage(buf, 0, 0, width, height, 0, 0, width, height);
+        }
+
     }
     
     function contains ( value, list ) {
