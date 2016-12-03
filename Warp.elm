@@ -311,7 +311,12 @@ update msg model =
                               , Ports.setUrl (makeEncodedOptions newModel)
                               ])
     UrlChange location ->
-      ( model, Cmd.none )
+        if location.hash == ("#" ++ makeEncodedOptions model) then
+            ( model, Cmd.none )
+        else
+            let newModel = initModel location in
+            ( { newModel | selectedPalette = model.selectedPalette },
+                  Ports.warpChange (Ports.modelToChange newModel) )
 
 
 
