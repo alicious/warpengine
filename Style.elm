@@ -1,13 +1,5 @@
 module Style exposing (..)
 
-body = 
-  [ ( "font-family", " 'Courier New', Courier, monospace " )
-  ]
-
-container = 
-  [ ( "overflow", "hidden" )
-  ]
-
 thread : Float -> String -> List ( String, String )
 thread width color = 
   [ ( "height", "100px" )
@@ -15,12 +7,6 @@ thread width color =
   , ( "background-color", color )
   , ( "float", "left" )
   ] 
-
-paletteInput = 
-  [ ( "height", "14px" )
-  , ( "float", "left" )
-  , ( "margin-left", "2px" )
-  ]
 
 swatch : String -> Bool -> List ( String, String )
 swatch color selected = 
