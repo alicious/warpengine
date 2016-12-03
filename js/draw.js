@@ -133,17 +133,17 @@ function main () {
                 - Math.floor( warpHeight / threadWidth / 2 );
         }
         
-        for ( var j = 0 ; j < warpHeight ; j++ ) {
-            var wOffset        = j * threadWidth;
-            var treadlingIndex = (j + start) % treadling.length;
-            var shafts         = tieup[treadling[treadlingIndex] - 1];
+	for ( var i = 0 ; i < threads.length ; i++ ) {
+	    var offset     = i * threadWidth;
+            var shaft      = threading[i];
+            var colorIndex = threads[ i ];
 
-	    for ( var i = 0 ; i < threads.length ; i++ ) {
-	        var offset = i * threadWidth;
+            ctx.fillStyle = colors[ colorIndex ].hex
 
-                var shaft = threading[i];
-
-                var colorIndex = threads[ i ];
+            for ( var j = 0 ; j < warpHeight ; j++ ) {
+                var wOffset        = j * threadWidth;
+                var treadlingIndex = (j + start) % treadling.length;
+                var shafts         = tieup[treadling[treadlingIndex] - 1];
 
                 // if we are drawnig just one color contine
                 // if this is not that color
@@ -155,7 +155,6 @@ function main () {
                     continue;
 
                 // Draw pixel
-                ctx.fillStyle = colors[ colorIndex ].hex
 	        ctx.fillRect( offset, wOffset, threadWidth, threadWidth );
 	    }
         }    
