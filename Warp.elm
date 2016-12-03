@@ -78,6 +78,7 @@ initModel location =
     , warpTemplates = initTemplates 
     , selectedTemplate = templateId
     , debug = "0"
+    , history = (History [] [])                            
     } 
 
 init : Navigation.Location -> ( Model, Cmd Msg )
@@ -184,6 +185,11 @@ view model =
           ]
       , div [ class "debug" ] 
         []
+      , button
+            [ class ( "undoButton" ) 
+            , onClick ( Undo ) 
+            ] 
+            [ text "Undo" ]
       ]
 
 
@@ -277,17 +283,39 @@ type Msg
   | Resize
   | ChangeTemplate String 
   | UrlChange Navigation.Location
+  | Undo
 
+
+-- HISTORY
+
+pushHistory : Model -> Model -> Model
+pushHistory old new =
+    let newHistory =
+            case old.history of
+                History previous next ->
+                    History (old :: previous) []
+    in
+    { new | history = newHistory }
+
+undo : Model -> Model
+undo model =
+    case model.history of
+        History previous next ->
+            case List.head previous of
+                Just newModle ->
+                    { newModle | history = History (Maybe.withDefault [] (List.tail previous)) (model :: next)}
+                Nothing -> model
 
 
 -- UPDATE
 
+        
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of 
     ChangePaletteEntry hex name ->
         let newModel =
-          { model | palette = 
+          pushHistory model { model | palette = 
             insert model.selectedPalette { hex = hex, name = name } model.palette
           }
         in
@@ -295,12 +323,12 @@ update msg model =
                                 , Ports.setUrl (makeEncodedOptions newModel)
                                 ] )  
     UpdateSelectedPalette index ->
-      ( { model | selectedPalette = index }, Cmd.none )
+      ( pushHistory model { model | selectedPalette = index }, Cmd.none )
     Resize ->
       ( model, Ports.warpChange (Ports.modelToChange model) )
     ChangeTemplate index -> 
       let newModel = 
-        { model | warp = 
+        pushHistory model { model | warp = 
             case Dict.get ( String.toInt index |> Result.withDefault 0 ) model.warpTemplates of
               Nothing -> model.warp
               Just warp -> warp 
@@ -315,10 +343,14 @@ update msg model =
             ( model, Cmd.none )
         else
             let newModel = initModel location in
-            ( { newModel | selectedPalette = model.selectedPalette },
+            ( pushHistory model { newModel | selectedPalette = model.selectedPalette },
                   Ports.warpChange (Ports.modelToChange newModel) )
 
-
+    Undo ->
+        let newModel = undo model in
+        ( newModel, Cmd.batch [ Ports.warpChange (Ports.modelToChange newModel)
+                              , Ports.setUrl (makeEncodedOptions newModel)
+                              ])
 
 -- SUBSCRIPTIONS
 

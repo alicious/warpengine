@@ -3,6 +3,7 @@ module Model exposing (..)
 import Dict exposing ( Dict, fromList, insert )
 import Array exposing ( Array )
 
+type History = History (List Model) (List Model) 
 
 type alias Model = 
   { warp : Warp
@@ -11,6 +12,7 @@ type alias Model =
   , warpTemplates : Dict Int Warp
   , selectedTemplate : Int
   , debug : String
+  , history : History
   }
 
 type alias Warp = { name : String
