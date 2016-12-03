@@ -138,7 +138,7 @@ function main () {
            
             buf.fillStyle = "#ffffff";
 
-            for ( var j = 0 ; j < warpHeight ; j++ ) {
+            for ( var j = 0 ; j * threadWidth < warpHeight ; j++ ) {
                 var wOffset        = j * threadWidth;
                 var treadlingIndex = (j + start) % treadling.length;
                 var shafts         = tieup[treadling[treadlingIndex] - 1];
