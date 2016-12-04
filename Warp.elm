@@ -1,6 +1,6 @@
 module Warp exposing (..)
 
-import Html exposing ( Html, button, div, text, select, option, input, span )
+import Html exposing ( Html, button, div, text, select, option, input, span, img )
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick, onInput )
 import Navigation
@@ -167,11 +167,6 @@ view model =
                 )
               , div [ class "default-colors" ]
                 [ button [ onClick SetDefaultColors ] [ text "use cat's cradle colors" ] ]
-              , button
-                    [ class ( "undo-button" ) 
-                    , onClick ( Undo ) 
-                    ] 
-                    [ text "undo" ]
               ]
             , div [ class "weft-color" ]
               [ model.palette
@@ -180,6 +175,20 @@ view model =
               ]
             ]
           ]
+      , div [ class "undo-redo" ]
+        [ div [ class "undo-redo-buttons" ] 
+          [ div 
+            [ class "undo-button" 
+            , onClick Undo 
+            ] 
+            [ img [ src "assets/undo.png", width 30 ] [] ]
+          , div 
+            [ class "redo-button" 
+            , onClick Redo 
+            ] 
+            [ img [ src "assets/redo.png", width 30 ] [] ]
+          ]
+        ]
       , div [ class "debug" ] 
         []
       ]
@@ -277,27 +286,37 @@ type Msg
   | ChangeTemplate String 
   | UrlChange Navigation.Location
   | Undo
+  | Redo 
 
 
 -- HISTORY
 
 pushHistory : Model -> Model -> Model
-pushHistory old new =
-    let newHistory =
-            case old.history of
-                History previous next ->
-                    History (old :: previous) []
-    in
-    { new | history = newHistory }
+pushHistory oldModel newModel =
+  let ( History undoHistory redoHistory ) = newModel.history 
+  in { newModel | history = History ( oldModel :: undoHistory ) [] }
 
 undo : Model -> Model
 undo model =
-    case model.history of
-        History previous next ->
-            case List.head previous of
-                Just newModle ->
-                    { newModle | history = History (Maybe.withDefault [] (List.tail previous)) (model :: next)}
-                Nothing -> model
+  let ( History undoHistory redoHistory ) = model.history in 
+    case List.head undoHistory of
+      Just newModel -> 
+        { newModel | history = 
+          History ( Maybe.withDefault [] ( List.tail undoHistory ) ) 
+                  ( model :: redoHistory ) 
+        }
+      Nothing -> model
+
+redo : Model -> Model
+redo model =
+  let ( History undoHistory redoHistory ) = model.history in 
+    case List.head redoHistory of
+      Just newModel -> 
+        { newModel | history = 
+          History ( model :: undoHistory ) 
+                  ( Maybe.withDefault [] ( List.tail redoHistory ) ) 
+        }
+      Nothing -> model
 
 
 -- UPDATE
@@ -346,10 +365,15 @@ update msg model =
             ( pushHistory model { newModel | selectedPalette = model.selectedPalette },
                   Ports.warpChange (Ports.modelToChange newModel) )
     Undo ->
-        let newModel = undo model in
-        ( newModel, Cmd.batch [ Ports.warpChange (Ports.modelToChange newModel)
-                              , Ports.setUrl (makeEncodedOptions newModel)
-                              ])
+      let newModel = undo model in
+      ( newModel, Cmd.batch [ Ports.warpChange (Ports.modelToChange newModel)
+                            , Ports.setUrl (makeEncodedOptions newModel)
+                            ])
+    Redo -> 
+      let newModel = redo model in
+      ( newModel, Cmd.batch [ Ports.warpChange (Ports.modelToChange newModel)
+                            , Ports.setUrl (makeEncodedOptions newModel)
+                            ])
 
 -- SUBSCRIPTIONS
 

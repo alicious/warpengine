@@ -97,14 +97,9 @@ body {
   margin-top: 3px;
 }
 
-.default-colors button, button.undo-button {
+.default-colors button {
   font-size: 10px;
   border-radius: 5px;
-}
-
-.undo-button {
-  float: left;
-  margin-top: 10px;
 }
 
 .weft-color {
@@ -122,6 +117,25 @@ body {
 
 .weft-color-name {
   margin: 8px 0 0 3px;
+}
+
+.undo-redo {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.undo-redo-buttons {
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100px;
+}
+
+.undo-button, .redo-button {
+  float: left;
+  margin: 10px;
+  height: 30px;
 }
 
 .shareAndImport {
