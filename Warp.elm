@@ -69,6 +69,7 @@ initModel location =
     , warpTemplates = initTemplates 
     , selectedTemplate = templateId
     , debug = "0"
+    , history = (History [] [])                            
     } 
 
 init : Navigation.Location -> ( Model, Cmd Msg )
@@ -166,6 +167,11 @@ view model =
                 )
               , div [ class "default-colors" ]
                 [ button [ onClick SetDefaultColors ] [ text "use cat's cradle colors" ] ]
+              , button
+                    [ class ( "undo-button" ) 
+                    , onClick ( Undo ) 
+                    ] 
+                    [ text "undo" ]
               ]
             , div [ class "weft-color" ]
               [ model.palette
@@ -270,28 +276,50 @@ type Msg
   | Resize
   | ChangeTemplate String 
   | UrlChange Navigation.Location
+  | Undo
 
+
+-- HISTORY
+
+pushHistory : Model -> Model -> Model
+pushHistory old new =
+    let newHistory =
+            case old.history of
+                History previous next ->
+                    History (old :: previous) []
+    in
+    { new | history = newHistory }
+
+undo : Model -> Model
+undo model =
+    case model.history of
+        History previous next ->
+            case List.head previous of
+                Just newModle ->
+                    { newModle | history = History (Maybe.withDefault [] (List.tail previous)) (model :: next)}
+                Nothing -> model
 
 
 -- UPDATE
 
+        
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of 
     ChangePaletteEntry hex name ->
-      let newModel =
-        { model | palette = 
-          insert model.selectedPalette { hex = hex, name = name } model.palette
-        }
-      in
-        ( newModel, Cmd.batch [ Ports.colorChange (Ports.modelToColorChange newModel)
-                              , Ports.setUrl (makeEncodedOptions newModel)
-                              ] )  
+        let newModel =
+          pushHistory model { model | palette = 
+            insert model.selectedPalette { hex = hex, name = name } model.palette
+          }
+        in
+          ( newModel, Cmd.batch [ Ports.colorChange (Ports.modelToColorChange newModel)
+                                , Ports.setUrl (makeEncodedOptions newModel)
+                                ] )  
     UpdateSelectedPalette index ->
-      ( { model | selectedPalette = index }, Cmd.none )
+      ( pushHistory model { model | selectedPalette = index }, Cmd.none )
     SetDefaultColors ->
       let newModel =
-        { model | palette = model.warp.defaultPalette }
+        ( pushHistory model { model | palette = model.warp.defaultPalette } )
       in
         ( newModel, Cmd.batch [ Ports.colorChange (Ports.modelToColorChange newModel)
                               , Ports.setUrl (makeEncodedOptions newModel)
@@ -300,7 +328,7 @@ update msg model =
       ( model, Ports.warpChange (Ports.modelToChange model) )
     ChangeTemplate index -> 
       let newModel = 
-        { model | warp = 
+        pushHistory model { model | warp = 
             case Dict.get ( String.toInt index |> Result.withDefault 0 ) model.warpTemplates of
               Nothing -> model.warp
               Just warp -> warp 
@@ -311,15 +339,17 @@ update msg model =
                               , Ports.setUrl (makeEncodedOptions newModel)
                               ])
     UrlChange location ->
-      if location.hash == ("#" ++ makeEncodedOptions model) then
-        ( model, Cmd.none )
-      else
-        let newModel = initModel location in
-          ( { newModel | selectedPalette = model.selectedPalette }
-            , Ports.warpChange (Ports.modelToChange newModel) 
-          )
-
-
+        if location.hash == ("#" ++ makeEncodedOptions model) then
+            ( model, Cmd.none )
+        else
+            let newModel = initModel location in
+            ( pushHistory model { newModel | selectedPalette = model.selectedPalette },
+                  Ports.warpChange (Ports.modelToChange newModel) )
+    Undo ->
+        let newModel = undo model in
+        ( newModel, Cmd.batch [ Ports.warpChange (Ports.modelToChange newModel)
+                              , Ports.setUrl (makeEncodedOptions newModel)
+                              ])
 
 -- SUBSCRIPTIONS
 

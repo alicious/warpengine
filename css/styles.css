@@ -83,7 +83,7 @@ body {
 }
 
 .warp-template {
-  display: inline-block;
+  float: left;
   width: 142px;
 }
 
@@ -93,18 +93,23 @@ body {
 }
 
 .default-colors {
-  display: inline-block;
-}
-
-.default-colors button {
-  font-size: 10px;
-  border-radius: 5px;
+  float: left;
   margin-top: 3px;
 }
 
+.default-colors button, button.undo-button {
+  font-size: 10px;
+  border-radius: 5px;
+}
+
+.undo-button {
+  float: left;
+  margin-top: 10px;
+}
+
 .weft-color {
-  display: inline-block;
   margin-left: 50px;
+  float: right;
 }
 
 .weft-color div {
@@ -120,7 +125,7 @@ body {
 }
 
 .shareAndImport {
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 20px;
   margin-left: auto;
   margin-right: auto;
