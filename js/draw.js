@@ -145,17 +145,26 @@ function main () {
            
             buf.fillStyle = "#ffffff";
 
+            var wOffset = undefined;
+
             for ( var j = 0 ; j * threadWidth < warpHeight ; j++ ) {
-                var wOffset        = j * threadWidth;
+                
                 var treadlingIndex = (j + start) % treadling.length;
                 var shafts         = tieup[treadling[treadlingIndex] - 1];
 
                 // continue if is is weft
-                if (contains( shaft, shafts ))
-                    continue;
+                if (contains( shaft, shafts )) {
+                    if ( wOffset !== undefined ) {
+                        var end = j * threadWidth;
+                        // Draw pixel
+	                buf.fillRect( offset, wOffset, threadWidth, end - wOffset );
+                    }
 
-                // Draw pixel
-	        buf.fillRect( offset, wOffset, threadWidth, threadWidth );
+                    wOffset = undefined;
+                }
+                else if ( wOffset === undefined )
+                    wOffset = j * threadWidth;
+                
 	    }
         }
         
