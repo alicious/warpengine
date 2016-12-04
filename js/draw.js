@@ -20,7 +20,7 @@ function main () {
     app.ports.colorChange.subscribe(function (data) {
         // Wait for the next browser call to do the paint
         requestAnimationFrame(function() {
-            drawColor(data[1]);
+            drawColor(data);
         });
     });
 

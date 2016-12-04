@@ -19,6 +19,7 @@ type alias Warp = { name : String
                   , treadling : Array Int
                   , weftColors : Array Int
                   , tieup : List ( List Int )
+                  , defaultPalette : Palette
                   } 
 
 type alias WarpData =
@@ -28,6 +29,7 @@ type alias WarpData =
   , treadling : String
   , warpColors : String
   , weftColors : String
+  , defaultPalette : List ( Int, PaletteColor )
   }
 
 type alias Palette = Dict Int PaletteColor 

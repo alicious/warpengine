@@ -10,24 +10,42 @@ import Dict exposing ( Dict )
 
 import Model exposing (..)
 
-port warpChange  : ( Warp, PaletteMsg      ) -> Cmd msg
-port colorChange : ( Warp, PaletteMsg, Int ) -> Cmd msg
-port setUrl      : String                    -> Cmd msg
-                   
+port warpChange  : ( WarpMsg, PaletteMsg ) -> Cmd msg
+port colorChange : PaletteMsg              -> Cmd msg
+port setUrl      : String                  -> Cmd msg
+
+type alias WarpMsg = 
+  { name : String
+  , warpColors : Array Int
+  , threading : Array Int
+  , treadling : Array Int
+  , weftColors : Array Int
+  , tieup : List ( List Int )
+  } 
+
 type alias PaletteMsgEntry =
   { index : Int, hex : String, name : String }
 
 type alias PaletteMsg =
   List PaletteMsgEntry
 
-modelToColorChange : Model -> ( Warp, PaletteMsg, Int )
-modelToColorChange model =
-    ( model.warp, paletteToMsg model.palette, model.selectedPalette )
+modelToColorChange : Model -> PaletteMsg
+modelToColorChange model = paletteToMsg model.palette
 
-modelToChange : Model -> ( Warp, PaletteMsg )
+modelToChange : Model -> ( WarpMsg, PaletteMsg )
 modelToChange model =
-    ( model.warp, paletteToMsg model.palette )
+    ( warpToMsg model.warp, paletteToMsg model.palette )
         
+warpToMsg : Warp -> WarpMsg
+warpToMsg warp = 
+  { name = warp.name 
+  , warpColors = warp.warpColors 
+  , threading = warp.threading 
+  , treadling = warp.treadling 
+  , weftColors = warp.weftColors 
+  , tieup = warp.tieup
+  } 
+ 
 paletteToMsg : Palette -> PaletteMsg
 paletteToMsg palette =
   palette

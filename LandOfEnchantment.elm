@@ -24,5 +24,18 @@ warp =
     , [3,4,6,2]
     , [2,3,5,1]
     ]
+
+  , defaultPalette = 
+    [ ( 0, { hex = "#512122", name = "wine red" } ) --weft
+    , ( 1, { hex = "#bd0102", name = "cherry" } )
+    , ( 2, { hex = "#c03813", name = "cayenne" } )
+    , ( 3, { hex = "#d27822", name = "burnt orange" } )
+    , ( 4, { hex = "#d8a642", name = "old gold" } )
+    , ( 5, { hex = "#1aa49d", name = "aqua marine" } )
+    , ( 6, { hex = "#2c4d66", name = "jeans" } )
+    , ( 7, { hex = "#9e1987", name = "magenta" } )
+    , ( 8, { hex = "#cc3777", name = "fuschia" } )
+    ]
+
   }
 

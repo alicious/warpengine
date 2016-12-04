@@ -35,21 +35,12 @@ initWarp warp =
   , treadling = jsonToArray warp.treadling
   , weftColors = jsonToArray warp.weftColors
   , tieup = warp.tieup
+  , defaultPalette = fromList warp.defaultPalette
   }
 
 initPalette : Palette
 initPalette =
-  fromList
-  [ ( 0, { hex = "#928c87", name = "dark grey" } )
-  , ( 1, { hex = "#7b5b6b", name = "mauve" } )
-  , ( 2, { hex = "#928c87", name = "dark grey" } )
-  , ( 3, { hex = "#dbc5a4", name = "flax" } )
-  , ( 4, { hex = "#eabc7b", name = "honey" } )
-  , ( 5, { hex = "#d2d8dc", name = "pale grey" } )
-  , ( 6, { hex = "#a5c0b3", name = "seaton" } )
-  , ( 7, { hex = "#5e8929", name = "peridot" } )
-  , ( 8, { hex = "#4d4d33", name = "taupe" } )
-  ]
+  let warp = BeSides.warp in fromList warp.defaultPalette
 
 initTemplates : Dict Int Warp
 initTemplates = 
@@ -162,8 +153,8 @@ view model =
       , div [ class "colorCatalog" ]
           ( List.map ( makeSwatch model ) MB.catalog
           )
-      , div [ class "weft-and-template-wrapper" ]
-          [ div [ class "weft-and-template" ]
+      , div [ class "warp-controls-wrapper" ]
+          [ div [ class "warp-controls" ]
             [ div [ class "warp-template" ] 
               [ select [ class "warp-template-select" 
                 , Html.Events.on "change" 
@@ -173,7 +164,8 @@ view model =
                   |> Dict.toList 
                   |> List.map ( templateOption model.selectedTemplate )
                 )
-
+              , div [ class "default-colors" ]
+                [ button [ onClick SetDefaultColors ] [ text "use cat's cradle colors" ] ]
               ]
             , div [ class "weft-color" ]
               [ model.palette
@@ -274,6 +266,7 @@ makeSwatch model ( hexcolor, name ) =
 type Msg 
   = ChangePaletteEntry String String
   | UpdateSelectedPalette Int
+  | SetDefaultColors 
   | Resize
   | ChangeTemplate String 
   | UrlChange Navigation.Location
@@ -286,16 +279,23 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of 
     ChangePaletteEntry hex name ->
-        let newModel =
-          { model | palette = 
-            insert model.selectedPalette { hex = hex, name = name } model.palette
-          }
-        in
-          ( newModel, Cmd.batch [ Ports.colorChange (Ports.modelToColorChange newModel)
-                                , Ports.setUrl (makeEncodedOptions newModel)
-                                ] )  
+      let newModel =
+        { model | palette = 
+          insert model.selectedPalette { hex = hex, name = name } model.palette
+        }
+      in
+        ( newModel, Cmd.batch [ Ports.colorChange (Ports.modelToColorChange newModel)
+                              , Ports.setUrl (makeEncodedOptions newModel)
+                              ] )  
     UpdateSelectedPalette index ->
       ( { model | selectedPalette = index }, Cmd.none )
+    SetDefaultColors ->
+      let newModel =
+        { model | palette = model.warp.defaultPalette }
+      in
+        ( newModel, Cmd.batch [ Ports.colorChange (Ports.modelToColorChange newModel)
+                              , Ports.setUrl (makeEncodedOptions newModel)
+                              ] )  
     Resize ->
       ( model, Ports.warpChange (Ports.modelToChange model) )
     ChangeTemplate index -> 
@@ -311,12 +311,13 @@ update msg model =
                               , Ports.setUrl (makeEncodedOptions newModel)
                               ])
     UrlChange location ->
-        if location.hash == ("#" ++ makeEncodedOptions model) then
-            ( model, Cmd.none )
-        else
-            let newModel = initModel location in
-            ( { newModel | selectedPalette = model.selectedPalette },
-                  Ports.warpChange (Ports.modelToChange newModel) )
+      if location.hash == ("#" ++ makeEncodedOptions model) then
+        ( model, Cmd.none )
+      else
+        let newModel = initModel location in
+          ( { newModel | selectedPalette = model.selectedPalette }
+            , Ports.warpChange (Ports.modelToChange newModel) 
+          )
 
 
 
