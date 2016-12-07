@@ -136,7 +136,7 @@ function main () {
                 - Math.floor( warpHeight / threadWidth / 2 );
         }
         
-	for ( var i = 0 ; i < threads.length ; i++ ) {
+	for ( var i = 0 ; i < threads.length ; i++ ) { // reading warp left to right
 	    var offset     = i * threadWidth;
             var shaft      = threading[i];
             var colorIndex = threads[ i ];
@@ -147,13 +147,13 @@ function main () {
 
             var wOffset = undefined;
 
-            for ( var j = 0 ; j * threadWidth < warpHeight ; j++ ) {
+            for ( var j = 0 ; j <  Math.ceil(warpHeight/threadWidth) ; j++ ) {
                 
                 var treadlingIndex = (j + start) % treadling.length;
                 var shafts         = tieup[treadling[treadlingIndex] - 1];
 
                 // continue if is is weft
-                if (contains( shaft, shafts )) {
+                if (contains( shaft, shafts )) { //sinking shed
                     if ( wOffset !== undefined ) {
                         var end = j * threadWidth;
                         // Draw pixel
@@ -166,6 +166,11 @@ function main () {
                     wOffset = j * threadWidth;
                 
 	    }
+                    if ( wOffset !== undefined ) {
+                        var end = j * threadWidth;
+                        // Draw pixel
+	                buf.fillRect( offset, wOffset, threadWidth, end - wOffset );
+                    }
         }
         
         drawColor( colors );
