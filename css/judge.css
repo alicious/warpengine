@@ -1,15 +1,73 @@
+.judgificator {
+  float: left;
+  width: 100%;
+  overflow: hidden;
+}
+
 .page-title {
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: bold;
   margin-bottom: 20px;
+}
+
+.section {
+  float: left;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+  border-bottom: 1px solid #666666
+}
+
+.entries {
+  overflow: hidden;
 }
 
 .entry {
   overflow: hidden;
+  float: left;
+  width: 300px;
 }
 
 .entry-iframe {
   margin-top: -100px;
   height: 200px;
-  scrolling: no;
   border: none;
 }
+
+.actions {
+  font-size: 10px;
+  float: left;
+  margin-left: 20px;
+}
+
+.actions a, .actions div {
+  display: inline-block;
+}
+
+.sort-buttons button {
+  margin-right: 10px;
+}
+
+.yes-list {
+  overflow: hidden;
+}
+
+.yes-list-label {
+  font-size: 14px;
+  text-align: left;
+}
+
+.yes-list pre {
+  border: 1px solid #AAAAAA;
+  font-size: 8px;
+  float: left;
+  padding: 10px;
+}
+
