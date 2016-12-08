@@ -13,14 +13,12 @@ main = Html.beginnerProgram
 
 type alias Model = 
   { undecided : List String
-  , yes : List String
-  , no : List String
+  , loves : List String
   }
 
 model =
   { undecided = ContestEntries.entries
-  , yes = []
-  , no = []
+  , loves = []
   }
 
 
@@ -32,33 +30,30 @@ view model =
   div [ class "judgificator" ]
   [ div [ class "page-title" ]
       [ text "CHROMATIC JUDGE-O-MATIC" ]
-  , if not ( List.isEmpty model.yes ) then
-      div [ class "section" ] 
-      [ div [ class "section-title" ] [ text "yes" ]
+  , snapJudgeDiv model.undecided
+  , if not ( List.isEmpty model.loves ) then
+      div [ class "loves" ] 
+      [ div [ class "section-title" ] [ text "loves" ]
       , div [ class "entries" ]
-        ( List.map ( buildEntry "yes" ) model.yes)
+        ( List.map ( buildEntry "love" ) model.loves )
       , div [ class "yes-list" ] 
         [ div [ class "yes-list-label" ] [ text "list of YES" ]
         , pre []
-          [ text ( String.join "\n" model.yes ) ]
+          [ text ( String.join "\n" model.loves) ]
         ]
       ] else
     text ""
-  , if not ( List.isEmpty model.undecided ) then
-      div [ class "section" ] 
-      [ div [ class "section-title" ] [ text "undecided" ]
-      , div [ class "entries" ]
-        ( List.map ( buildEntry "undecided" ) model.undecided )
-      ] else
-    text ""
-  , if not ( List.isEmpty model.no ) then
-      div [ class "section" ] 
-      [ div [ class "section-title" ] [ text "no" ]
-      , div [ class "entries" ]
-        ( List.map ( buildEntry "no" ) model.no)
-      ] else
-    text ""
   ]
+
+snapJudgeDiv : List String -> Html Msg
+snapJudgeDiv undecided =
+  case undecided of 
+    [] -> text ""
+    entry::entries ->
+      div [ class "snap-judge" ] 
+      [ div [ class "section-title" ] [ text "snap judge this" ]
+      , buildEntry "snap-judge" entry
+      ]
 
 buildEntry : String -> String -> Html Msg
 buildEntry category link =
@@ -79,47 +74,42 @@ buildEntry category link =
 entryButtons : String -> String -> Html Msg
 entryButtons category link =
   case category of 
-    "undecided" -> 
+    "snap-judge" -> 
       div [ class "sort-buttons" ]
-      [ button [ onClick ( No link ) ] [ text "nope" ]
-      , button [ onClick ( Yes link ) ] [ text "yep" ]
+      [ button [ onClick ( Love link ) ] [ text "love it" ]
+      , button [ onClick ( Reject link ) ] [ text "next" ]
       ]
-    "yes" ->
+    "love" ->
       div [ class "sort-buttons" ]
-      [ button [ onClick ( No link ) ] [ text "move to no" ] 
+      [ button [ onClick ( LetGo link ) ] [ text "let it go" ] 
       , button [ onClick ( UpRank link ) ] [ text "up in ranks" ] 
       ]
-    "no" ->
-      div [ class "sort-buttons" ]
-      [ button [ onClick ( Yes link ) ] [ text "move to yes" ] ]
-    _ -> div [ class "sort-buttons" ] []
+    _ -> text ""
        
 
 
 -- UPDATE  
 
 type Msg 
-  = Yes String 
-  | No String
+  = Love String 
+  | Reject String
+  | LetGo String
   | UpRank String
 
 update : Msg -> Model -> Model
 update msg model = 
   case msg of 
-    No entry ->
+    Love entry -> 
       { model  
-      | undecided = remove entry model.undecided
-      , yes = remove entry model.yes
-      , no = ( entry :: model.no )
+      | undecided = Maybe.withDefault [] ( List.tail model.undecided )
+      , loves = ( model.loves ++ [ entry ] )
       } 
-    Yes entry -> 
-      { model  
-      | undecided = remove entry model.undecided
-      , yes = ( entry :: model.yes )
-      , no = remove entry model.no
-      } 
+    Reject entry ->
+      { model | undecided = Maybe.withDefault [] ( List.tail model.undecided ) }
+    LetGo entry ->
+      { model | loves = remove entry model.loves }
     UpRank entry ->
-      { model | yes = ( moveUp entry model.yes ) }
+      { model | loves = ( moveUp entry model.loves ) }
 
 remove : a -> List a -> List a
 remove element list = 

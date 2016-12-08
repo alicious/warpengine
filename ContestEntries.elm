@@ -123,4 +123,7 @@ entries =
   , "http://chromatic.catscradletextiles.com/#2.928c87.5b2068.124190.1a945c.fffb93.9e1987.92bfdb.bef4da.fffb93"
   , "http://chromatic.catscradletextiles.com/#1.000000.5370c6.009dae.9e1987.5b2068.000000.000000.000000.000000"
   , "http://chromatic.catscradletextiles.com/#5.33192b.472446.9e1987.cc3777.ff7700.ffd260.36b0d8.009dae.18c4ae"
+  , "http://chromatic.catscradletextiles.com/#5.33192b.33192b.9e1987.c30b0d.c03813.ff7700.ff7700.fcf25f.fffb93"
+  , "http://chromatic.catscradletextiles.com/#4.ddeeee.fdfff7.18c4ae.bef4da.fdfff7.ffd6da.9e1987.124190.36b0d8"
+  , "http://chromatic.catscradletextiles.com/#1.fdfff7.fdfff7.36b0d8.fdfff7.18c4ae.fdfff7.009dae.18c4ae.36b0d8"
   ]

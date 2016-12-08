@@ -11,7 +11,3 @@
    static_files: www/\1
    upload: www/(.*)
  
- - url: /judgificator
-   static_files: www/judge.html
-   upload: www/judge.html
- 

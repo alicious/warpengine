@@ -10,19 +10,35 @@
   margin-bottom: 20px;
 }
 
-.section {
-  float: left;
-  width: 100%;
-  margin-bottom: 40px;
-}
-
 .section-title {
   font-size: 16px;
   font-weight: bold;
-  margin-left: 20px;
+  padding-left: 20px;
   margin-bottom: 20px;
   text-align: left;
   border-bottom: 1px solid #666666
+}
+
+.snap-judge, .snap-judge .entry, .snap-judge .entry-iframe {
+  width: 100%;
+}
+
+.snap-judge .entry-iframe {
+  height: 260px;
+  margin-top: -50px;
+}
+
+.snap-judge .actions {
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
+  margin-top: 10px;
+}
+
+.loves {
+  float: left;
+  width: 100%;
+  margin-bottom: 40px;
 }
 
 .entries {
@@ -32,11 +48,24 @@
 .entry {
   overflow: hidden;
   float: left;
-  width: 300px;
+  width: 25%;
   margin-bottom: 20px;
 }
 
+@media only screen and (max-width: 1200px) {
+  .entry {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .entry {
+    width: 100%;
+  }
+}
+
 .entry-iframe {
+  width: 100%;
   margin-top: -100px;
   height: 220px;
   border: none;
