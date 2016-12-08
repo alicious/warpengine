@@ -32,13 +32,6 @@ view model =
   div [ class "judgificator" ]
   [ div [ class "page-title" ]
       [ text "CHROMATIC JUDGE-O-MATIC" ]
-  , if not ( List.isEmpty model.undecided ) then
-      div [ class "section" ] 
-      [ div [ class "section-title" ] [ text "undecided" ]
-      , div [ class "entries" ]
-        ( List.map ( buildEntry "undecided" ) model.undecided )
-      ] else
-    text ""
   , if not ( List.isEmpty model.yes ) then
       div [ class "section" ] 
       [ div [ class "section-title" ] [ text "yes" ]
@@ -49,6 +42,13 @@ view model =
         , pre []
           [ text ( String.join "\n" model.yes ) ]
         ]
+      ] else
+    text ""
+  , if not ( List.isEmpty model.undecided ) then
+      div [ class "section" ] 
+      [ div [ class "section-title" ] [ text "undecided" ]
+      , div [ class "entries" ]
+        ( List.map ( buildEntry "undecided" ) model.undecided )
       ] else
     text ""
   , if not ( List.isEmpty model.no ) then

@@ -33,11 +33,12 @@
   overflow: hidden;
   float: left;
   width: 300px;
+  margin-bottom: 20px;
 }
 
 .entry-iframe {
   margin-top: -100px;
-  height: 200px;
+  height: 220px;
   border: none;
 }
 
