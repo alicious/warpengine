@@ -115,7 +115,7 @@ function main () {
             threadWidth = Math.ceil(warpWidth/threads.length);
 
         warpWidth = threads.length * threadWidth;
-        warpHeight = WARP_HEIGHT * threadWidth;
+        warpHeight = WARP_HEIGHT * warpWidth/bounds.width ;
         
         
         canvas.width = warpWidth;
