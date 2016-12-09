@@ -3,24 +3,49 @@ import Html exposing ( Html, div, text, iframe, a, button, pre )
 import Html.Keyed exposing (ul)
 import Html.Attributes exposing ( .. )
 import Html.Events exposing ( onClick )
+import Random
+import Time
 
 import ContestEntries
 
-main = Html.beginnerProgram
-  { model = model
+main = Html.programWithFlags
+  { init = init
   , view = view
   , update = update
+  , subscriptions = \m -> Sub.none
   }
+
+
+
+-- MODEL
 
 type alias Model = 
   { undecided : List String
   , loves : List String
   }
 
-model =
-  { undecided = List.map .link ContestEntries.entries
-  , loves = []
-  }
+init : Float -> ( Model, Cmd Msg )
+init rand =
+  ( { undecided = ContestEntries.entries
+        |> List.map .link
+        |> randomizeList rand
+    , loves = []
+    }
+  , Cmd.none )
+
+randomizeList : Float -> List a -> List a
+randomizeList rand list =
+  let 
+    rlist = Random.initialSeed ( truncate rand )
+      |> Random.step ( Random.list ( List.length list ) ( Random.int 1 100 ) )
+      |> first
+  in List.map2 (,) rlist list |> List.sortBy first |> List.unzip |> second
+   
+first : ( a, b ) -> a 
+first ( first, second ) = first
+
+second : ( a, b ) -> b 
+second ( first, second ) = second 
 
 
 
@@ -103,20 +128,24 @@ type Msg
   | LetGo String
   | UpRank String
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = 
   case msg of 
     Love entry -> 
-      { model  
-      | undecided = Maybe.withDefault [] ( List.tail model.undecided )
-      , loves = ( model.loves ++ [ entry ] )
-      } 
+      ( { model  
+        | undecided = Maybe.withDefault [] ( List.tail model.undecided )
+        , loves = ( model.loves ++ [ entry ] )
+        } 
+      , Cmd.none )
     Reject entry ->
-      { model | undecided = Maybe.withDefault [] ( List.tail model.undecided ) }
+      ( { model | undecided = Maybe.withDefault [] ( List.tail model.undecided ) }
+      , Cmd.none )
     LetGo entry ->
-      { model | loves = remove entry model.loves }
+      ( { model | loves = remove entry model.loves }
+      , Cmd.none )
     UpRank entry ->
-      { model | loves = ( moveUp entry model.loves ) }
+      ( { model | loves = ( moveUp entry model.loves ) }
+      , Cmd.none )
 
 remove : a -> List a -> List a
 remove element list = 
