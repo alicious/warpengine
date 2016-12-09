@@ -95,9 +95,9 @@ function main () {
         // Make the width of the warp be the
         // width of it's parent element.
         var bounds = getBounds( canvas );
-
+        var WARP_HEIGHT = 200;
         var warpWidth  = bounds.width;
-        var warpHeight = 200; //bounds.height; 
+        var warpHeight = WARP_HEIGHT; //bounds.height; 
 
         var ratio = getPixelRatio();
         
@@ -109,63 +109,97 @@ function main () {
             warpWidth  *= ratio;
             warpHeight *= ratio;            
 
-            canvas.width = warpWidth;
-            canvas.height = warpHeight;
-
         }
-
-
-        initBuffers( warpWidth, warpHeight, colors );
-        
         
         if ( threads.length != 0 )
-            threadWidth = warpWidth/threads.length;
+            threadWidth = Math.ceil(warpWidth/threads.length);
 
-
-        // Adjust drawing possition to fill pixles exatly
-        // avoiding blurry lines see:
-        //   http://www.mobtowers.com/html5-canvas-crisp-lines-every-time/
-        //
-        var translate = (threadWidth % 2) / 2;
-        ctx.translate(translate, translate);
+        warpWidth = threads.length * threadWidth;
+        warpHeight = WARP_HEIGHT * threadWidth;
         
+        
+        canvas.width = warpWidth;
+        canvas.height = warpHeight;
+
+        initBuffers( warpWidth, warpHeight, colors );
+
+        
+        var tupleBuffer = document.createElement("canvas");
+        tupleBuffer.width  = warpWidth;
+        tupleBuffer.height = warpHeight;
+        
+        var tupleOffsets = {};
+        var nextTuple    = 0;
+        var tupleContext = tupleBuffer.getContext('2d');
+
+        tupleContext.fillStyle = "rgba(0,0,0,0)"; 
+	tupleContext.fillRect( 0, 0, warpWidth, warpWidth );
+        tupleContext.fillStyle = "#000000";
+
         var start = 0;
 
         if ( treadling.length * threadWidth > warpHeight ) {
             start = Math.ceil(treadling.length/2)
                 - Math.floor( warpHeight / threadWidth / 2 );
         }
+
+        var trippleWidth = threadWidth * 3;
         
 	for ( var i = 0 ; i < threads.length ; i++ ) {
 	    var offset     = i * threadWidth;
             var shaft      = threading[i];
-            var colorIndex = threads[ i ];
+            var colorIndex = threads[i];
 
-            var buf = colorBuffers[ colorIndex ].getContext('2d');
-           
-            buf.fillStyle = "#ffffff";
+            var nextShaft     = "E";
+            var preivousShaft = "E";
 
-            var wOffset = undefined;
+            if ( i < (threads.length - 1) )
+                nextShaft = threads[i+1]
+            
+            if ( i !== 0 )
+                preivousShaft = threading[i-1];
+            
+            var tupleKey    = shaft + "-" + nextShaft;
+            var cashOffset = tupleOffsets[tupleKey];
 
-            for ( var j = 0 ; j * threadWidth < warpHeight ; j++ ) {
+            if ( cashOffset === undefined ) {
+                cashOffset = nextTuple;
+                nextTuple  += trippleWidth;
+
+                tupleOffsets[tupleKey] = cashOffset;
                 
-                var treadlingIndex = (j + start) % treadling.length;
-                var shafts         = tieup[treadling[treadlingIndex] - 1];
+                var wOffset  = undefined;
+                    
+                for ( var j = 0 ; j * threadWidth < warpHeight ; j++ ) {
+                        
+                    var treadlingIndex = (j + start) % treadling.length;
+                    var shafts         = tieup[treadling[treadlingIndex] - 1];
 
-                // continue if is is weft
-                if (contains( shaft, shafts )) {
-                    if ( wOffset !== undefined ) {
-                        var end = j * threadWidth;
-                        // Draw pixel
-	                buf.fillRect( offset, wOffset, threadWidth, end - wOffset );
+                    // continue if is is weft
+                    if (contains( shaft, shafts )) {
+                        if ( wOffset !== undefined ) {
+                            var end = j * threadWidth;
+                            // Draw pixel
+                            tupleContext.fillRect(
+                                cashOffset + 1, wOffset,
+                                threadWidth   , end - wOffset );
+                        }
+
+                        wOffset = undefined;
                     }
+                    else if ( wOffset === undefined )
+                        wOffset = j * threadWidth;
+                        
+	        }
+            }
+            
+            var buf = colorBuffers[ colorIndex ].getContext('2d');
 
-                    wOffset = undefined;
-                }
-                else if ( wOffset === undefined )
-                    wOffset = j * threadWidth;
-                
-	    }
+            buf.drawImage(tupleBuffer,
+                          cashOffset , 0, trippleWidth, warpHeight,
+                          offset -1  , 0, trippleWidth, warpHeight);
+
+
         }
         
         drawColor( colors );
