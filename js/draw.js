@@ -145,7 +145,7 @@ function main () {
 
         var trippleWidth = threadWidth * 3;
         
-	for ( var i = 0 ; i < threads.length ; i++ ) {
+	for ( var i = 0 ; i < threads.length ; i++ ) { // reading warp left to right
 	    var offset     = i * threadWidth;
             var shaft      = threading[i];
             var colorIndex = threads[i];
@@ -170,7 +170,7 @@ function main () {
                 
                 var wOffset  = undefined;
                     
-                for ( var j = 0 ; j * threadWidth < warpHeight ; j++ ) {
+                for ( var j = 0 ; j < Math.ceil(warpHeight/threadWidth) ; j++ ) {
                         
                     var treadlingIndex = (j + start) % treadling.length;
                     var shafts         = tieup[treadling[treadlingIndex] - 1];
@@ -191,6 +191,15 @@ function main () {
                         wOffset = j * threadWidth;
                         
 	        }
+                
+                if ( wOffset !== undefined ) {
+                    var end = j * threadWidth;
+                    // Draw pixel
+                    tupleContext.fillRect(
+                        cashOffset + 1, wOffset,
+                        threadWidth   , end - wOffset );
+                }
+
             }
             
             var buf = colorBuffers[ colorIndex ].getContext('2d');
@@ -198,7 +207,6 @@ function main () {
             buf.drawImage(tupleBuffer,
                           cashOffset , 0, trippleWidth, warpHeight,
                           offset -1  , 0, trippleWidth, warpHeight);
-
 
         }
         

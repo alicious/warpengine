@@ -1,0 +1,127 @@
+.page {
+  float: left;
+  width: 100%;
+  overflow: hidden;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: bold;
+  padding-left: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+  border-bottom: 1px solid #666666
+}
+
+.snap-judge, .snap-judge .entry, .snap-judge .entry-iframe {
+  width: 100%;
+}
+
+.snap-judge .entry-iframe {
+  height: 260px;
+  margin-top: -50px;
+}
+
+.snap-judge .actions {
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
+  margin-top: 10px;
+}
+
+.loves {
+  float: left;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.entries {
+  overflow: hidden;
+}
+
+.entry {
+  overflow: hidden;
+  float: left;
+  width: 25%;
+  margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .entry, .actions {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .entry, .actions {
+    width: 100%;
+  }
+}
+
+.entry-iframe {
+  width: 100%;
+  margin-top: -100px;
+  height: 220px;
+  border: none;
+}
+
+.actions {
+  font-size: 10px;
+  float: left;
+  margin-left: 20px;
+}
+
+.actions a, .actions div {
+  display: inline-block;
+}
+
+.actions a {
+  margin-top: 3px;
+  margin-left: 10px;
+}
+
+.designer, .gallery .link {
+  font-size: 10px;
+}
+
+.designer {
+  float: left;
+  margin-left: 20px;
+}
+
+.gallery .link {
+  float: right;
+  margin-right: 20px;
+}
+
+.yes-list .sort-buttons {
+  float: left;
+}
+
+.sort-buttons button {
+  margin-right: 10px;
+}
+
+.yes-list {
+  overflow: hidden;
+  margin-left: 20px;
+}
+
+.yes-list-label {
+  font-size: 14px;
+  text-align: left;
+}
+
+.yes-list pre {
+  border: 1px solid #AAAAAA;
+  font-size: 8px;
+  float: left;
+  padding: 10px;
+}
+
