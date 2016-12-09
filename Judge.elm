@@ -36,7 +36,7 @@ view model =
       div [ class "loves" ] 
       [ div [ class "section-title" ] [ text "loves" ]
       , ul [ class "entries" ]
-        ( List.map ( buildEntry "love" ) model.loves )
+        ( List.map ( buildKeyedEntry "love" ) model.loves )
       , div [ class "yes-list" ] 
         [ div [ class "yes-list-label" ] [ text "list of YES" ]
         , pre []
@@ -53,12 +53,16 @@ snapJudgeDiv undecided =
     entry::entries ->
       div [ class "snap-judge" ] 
       [ div [ class "section-title" ] [ text "snap judge this" ]
-      , ul [] [ buildEntry "snap-judge" entry ]
+      , buildEntry "snap-judge" entry
       ]
 
-buildEntry : String -> String -> (String, Html Msg)
+buildKeyedEntry : String -> String -> (String, Html Msg)
+buildKeyedEntry category link =
+  ( link, buildEntry category link )
+
+buildEntry : String -> String -> Html Msg
 buildEntry category link =
-  ( link, div [ class "entry" ]
+  div [ class "entry" ]
   [ iframe 
       [ src link
       , class "entry-iframe"
@@ -72,7 +76,7 @@ buildEntry category link =
         ] 
         [ text "view full design" ]
     ]
-  ])
+  ]
 
 entryButtons : String -> String -> Html Msg
 entryButtons category link =
