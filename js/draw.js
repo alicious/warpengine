@@ -107,10 +107,9 @@ function main () {
             canvas.style.height = warpHeight + 'px';
 
             warpWidth  *= ratio;
-            warpHeight *= ratio;            
-
+            warpHeight *= ratio;
         }
-        
+
         if ( threads.length != 0 )
             threadWidth = Math.ceil(warpWidth/threads.length);
 

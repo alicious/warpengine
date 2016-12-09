@@ -1,5 +1,6 @@
 module Judge exposing (..)
 import Html exposing ( Html, div, text, iframe, a, button, pre )
+import Html.Keyed exposing (ul)
 import Html.Attributes exposing ( .. )
 import Html.Events exposing ( onClick )
 
@@ -34,7 +35,7 @@ view model =
   , if not ( List.isEmpty model.loves ) then
       div [ class "loves" ] 
       [ div [ class "section-title" ] [ text "loves" ]
-      , div [ class "entries" ]
+      , ul [ class "entries" ]
         ( List.map ( buildEntry "love" ) model.loves )
       , div [ class "yes-list" ] 
         [ div [ class "yes-list-label" ] [ text "list of YES" ]
@@ -52,12 +53,12 @@ snapJudgeDiv undecided =
     entry::entries ->
       div [ class "snap-judge" ] 
       [ div [ class "section-title" ] [ text "snap judge this" ]
-      , buildEntry "snap-judge" entry
+      , ul [] [ buildEntry "snap-judge" entry ]
       ]
 
-buildEntry : String -> String -> Html Msg
+buildEntry : String -> String -> (String, Html Msg)
 buildEntry category link =
-  div [ class "entry" ]
+  ( link, div [ class "entry" ]
   [ iframe 
       [ src link
       , class "entry-iframe"
@@ -71,7 +72,7 @@ buildEntry category link =
         ] 
         [ text "view full design" ]
     ]
-  ]
+  ])
 
 entryButtons : String -> String -> Html Msg
 entryButtons category link =
