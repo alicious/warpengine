@@ -37,5 +37,7 @@ warp =
     , ( 8, { hex = "#cc3777", name = "fuschia" } )
     ]
 
+  , about = "Land of Enchantment features two gradients revealed in alternating zig zag stripes, and is woven in an advancing point structure with a multitude of treadling options. \n\nDesign tip: use the first four palette swatches for one grad, and the last four for the other."
+
   }
 

@@ -37,5 +37,7 @@ warp =
     , ( 8, { hex = "#31395d", name = "marine" } )
     ]
   
+  , about = "Amethyst Mary is a simple asymmetric grad, woven in an undulating twill. \n\nDesign tip: the first palette swatch will be featured more heavily than the rest, and in the original draft, this first color was the same as the weft color."
+
   }
 

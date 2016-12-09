@@ -31,5 +31,7 @@ warp =
     , ( 8, { hex = "#14aa88", name = "sea green" } )
     ]
   
+  , about = "This (somewhat) unnamed design is the only one featured in Chromatic which has not already been woven at Cat's Cradle Textiles. Here we have a basic plainweave structure, where the star of the show is the palette itself, rendered in a blended fibonacci gradient." 
+  
   }
 
