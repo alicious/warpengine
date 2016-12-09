@@ -1,0 +1,82 @@
+.page {
+  float: left;
+  width: 100%;
+  overflow: hidden;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: bold;
+  padding-left: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+  border-bottom: 1px solid #666666
+}
+
+.entries {
+  overflow: hidden;
+}
+
+.entry {
+  overflow: hidden;
+  float: left;
+  width: 25%;
+  margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .entry {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .entry {
+    width: 100%;
+  }
+}
+
+.entry-iframe {
+  width: 100%;
+  margin-top: -100px;
+  height: 220px;
+  border: none;
+}
+
+.actions {
+  font-size: 10px;
+  float: left;
+  margin-left: 20px;
+}
+
+.actions a, .actions div {
+  display: inline-block;
+}
+
+.sort-buttons button {
+  margin-right: 10px;
+}
+
+.yes-list {
+  overflow: hidden;
+  margin-left: 20px;
+}
+
+.yes-list-label {
+  font-size: 14px;
+  text-align: left;
+}
+
+.yes-list pre {
+  border: 1px solid #AAAAAA;
+  font-size: 8px;
+  float: left;
+  padding: 10px;
+}
+

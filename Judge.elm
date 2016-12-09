@@ -17,7 +17,7 @@ type alias Model =
   }
 
 model =
-  { undecided = ContestEntries.entries
+  { undecided = List.map .link ContestEntries.entries
   , loves = []
   }
 
@@ -27,7 +27,7 @@ model =
 
 view : Model -> Html Msg
 view model =
-  div [ class "judgificator" ]
+  div [ class "page" ]
   [ div [ class "page-title" ]
       [ text "CHROMATIC JUDGE-O-MATIC" ]
   , snapJudgeDiv model.undecided
@@ -66,7 +66,9 @@ buildEntry category link =
   , div [ class "actions" ] 
     [ entryButtons category link
     , a [ href link 
-        , target "_blank" ] 
+        , target "_blank" 
+        , class "link" 
+        ] 
         [ text "view full design" ]
     ]
   ]

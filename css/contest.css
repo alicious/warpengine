@@ -1,4 +1,4 @@
-.judgificator {
+.page {
   float: left;
   width: 100%;
   overflow: hidden;
@@ -53,13 +53,13 @@
 }
 
 @media only screen and (max-width: 1200px) {
-  .entry {
+  .entry, .actions {
     width: 50%;
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .entry {
+  .entry, .actions {
     width: 100%;
   }
 }
@@ -81,12 +81,36 @@
   display: inline-block;
 }
 
+.actions a {
+  margin-top: 3px;
+  margin-left: 10px;
+}
+
+.designer, .gallery .link {
+  font-size: 10px;
+}
+
+.designer {
+  float: left;
+  margin-left: 20px;
+}
+
+.gallery .link {
+  float: right;
+  margin-right: 20px;
+}
+
+.yes-list .sort-buttons {
+  float: left;
+}
+
 .sort-buttons button {
   margin-right: 10px;
 }
 
 .yes-list {
   overflow: hidden;
+  margin-left: 20px;
 }
 
 .yes-list-label {

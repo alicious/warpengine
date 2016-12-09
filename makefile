@@ -4,6 +4,7 @@ elm:
 	mkdir -p www/js
 	elm-make Warp.elm --output=www/js/warp.js
 	elm-make Judge.elm --output=www/js/judge.js
+	elm-make Gallery.elm --output=www/js/gallery.js
 
 
 www: elm
@@ -11,7 +12,7 @@ www: elm
 	mkdir -p www/js 
 	mkdir -p www/css
 	mkdir -p www/images
-	cp -r index.html judge.html js css images www
+	cp -r index.html judge.html gallery.html js css images www
 	cp lib/clipboard.min.js www/js
 	cp -r assets www
 
