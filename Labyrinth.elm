@@ -38,5 +38,7 @@ warp =
     , ( 8, { hex = "#ffd260", name = "golden yellow" } )
     ]
   
+  , about = "Labyrinth is woven in a sampling of different fancy twills; each stripe features a different threading. The treadling on this draft advances slowly so that the design changes subtly along the length of the piece. \n\nDesign tip: the colors of Labyrinth are inherently symmetrical, so your first palette choice will be at the edges of the draft, working up to the last palette swatch being featured in the middle of the piece. The dividing lines between sections will always be the same as the weft color."
+  
   }
 

@@ -39,5 +39,7 @@ warp =
     , ( 8, { hex = "#4d4d33", name = "taupe" } )
     ]
 
+  , about = "BeSides is a reversible, two-sided grad in turned taquete. The two gradients are able to swap faces depending on treadling, so that it is possible to weave stripes of one grad into a background of the other, with the inverse colors shown on the opposite side. \n\nDesign tip: use the first four palette swatches for one grad, and the last four for the other."
+
   }
 

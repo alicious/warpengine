@@ -37,5 +37,7 @@ warp =
     , ( 8, { hex = "#eabc7b", name = "honey" } )
     ]
 
+  , about = "Close To Home is an eight color echo weave with a shingle/scale motif. \n\nDesign tip: feel free to experiment, but you might want to try having a smooth transition between colors along your palette, and aim for the last color to be somewhat close to the first (think circular grad)"
+
   }
 

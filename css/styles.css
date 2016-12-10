@@ -138,6 +138,20 @@ body {
   height: 30px;
 }
 
+.about-label {
+  font-weight: bold;
+  float: left;
+  font-size: 14pt;
+}
+
+pre.about-text {
+  font: inherit;
+  float: left;
+  text-align: left;
+  white-space: pre-wrap;
+  font-size: 10pt;
+}
+
 .shareAndImport {
   margin-top: 10px;
   margin-bottom: 20px;

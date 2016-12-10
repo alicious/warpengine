@@ -1,6 +1,6 @@
 module Warp exposing (..)
 
-import Html exposing ( Html, button, div, text, select, option, input, span, img )
+import Html exposing ( Html, button, div, text, select, option, input, span, img, pre )
 import Html.Attributes exposing (..)
 import Html.Events exposing ( onClick, onInput )
 import Navigation
@@ -36,6 +36,7 @@ initWarp warp =
   , weftColors = jsonToArray warp.weftColors
   , tieup = warp.tieup
   , defaultPalette = fromList warp.defaultPalette
+  , about = warp.about
   }
 
 initPalette : Palette
@@ -189,6 +190,10 @@ view model =
             [ img [ src "assets/redo.png", width 30 ] [] ]
           ]
         ]
+      , div [ class "about" ]
+        [ div [ class "about-label" ] [ text "About the Draft:" ]
+        , pre [ class "about-text" ] [ text ( .about model.warp ) ]
+        ]
       , div [ class "debug" ] 
         []
       ]
@@ -199,11 +204,6 @@ makeEncodedOptions model =
     toString model.selectedTemplate ++ "."
     ++ codifyPalette model.palette
 
-colorName : Int -> Palette -> String
-colorName index palette = 
-  case Dict.get index palette of
-    Nothing -> "unknown"
-    Just paletteEntry -> paletteEntry.name
 templateOption : Int -> ( Int, Warp ) -> Html Msg
 templateOption selectedTemplate ( index,  warp ) = 
   option [ value ( toString index )
@@ -327,13 +327,17 @@ update msg model =
   case msg of 
     ChangePaletteEntry hex name ->
         let newModel =
-          pushHistory model { model | palette = 
+          { model | palette = 
             insert model.selectedPalette { hex = hex, name = name } model.palette
           }
+            |> pushHistory model
         in
-          ( newModel, Cmd.batch [ Ports.colorChange (Ports.modelToColorChange newModel)
-                                , Ports.setUrl (makeEncodedOptions newModel)
-                                ] )  
+          ( newModel
+          , Cmd.batch 
+            [ Ports.colorChange (Ports.modelToColorChange newModel)
+            , Ports.setUrl (makeEncodedOptions newModel)
+            ] 
+          )  
     UpdateSelectedPalette index ->
       ( pushHistory model { model | selectedPalette = index }, Cmd.none )
     SetDefaultColors ->
