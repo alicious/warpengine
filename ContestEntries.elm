@@ -126,4 +126,18 @@ entries =
   , { name = "Kaisa Vanhala", link = "http://chromatic.catscradletextiles.com/#5.33192b.33192b.9e1987.c30b0d.c03813.ff7700.ff7700.fcf25f.fffb93" }
   , { name = "Kacey Birch", link = "http://chromatic.catscradletextiles.com/#4.ddeeee.fdfff7.18c4ae.bef4da.fdfff7.ffd6da.9e1987.124190.36b0d8" }
   , { name = "Kacey Birch", link = "http://chromatic.catscradletextiles.com/#1.fdfff7.fdfff7.36b0d8.fdfff7.18c4ae.fdfff7.009dae.18c4ae.36b0d8" }
+  , { name ="Cathi Kelly", link ="http://chromatic.catscradletextiles.com/#2.000000.000000.8ba6a7.928c87.92b7b7.fcf7e9.fcf7e9.92b7b7.fcf7e9" }
+  , { name ="Allysa Duray ", link ="http://chromatic.catscradletextiles.com/#2.5b2068.000000.5b2068.9e1987.124190.1aa49d.bef4da.ddeeee.4b5359" }
+  , { name ="Allysa Duray ", link ="http://chromatic.catscradletextiles.com/#1.000000.1aa49d.ddeeee.5370c6.124190.5b2068.9e1987.472446.4b5359" }
+  , { name ="Toni Chapman ", link ="http://chromatic.catscradletextiles.com/#2.000000.33192b.472446.5b2068.7b5b6b.9e1987.cc3777.5b2068.472446" }
+  , { name ="Rachel Cook", link ="http://chromatic.catscradletextiles.com/#1.31395d.5b2068.9e1987.242442.5370c6.1a945c.d8a642.c03813.cc3777" }
+  , { name ="Liz Gliot", link ="http://chromatic.catscradletextiles.com/#5.242442.baaec4.472446.36b0d8.5e8929.332500.ebffcc.242442.000000" }
+  , { name ="Silvia Barriga ", link ="http://chromatic.catscradletextiles.com/#5.000000.512122.bd0102.a01e32.5b2068.31395d.242442.ff8e9a.33192b" }
+  , { name ="Kate Graham Krengel", link ="http://chromatic.catscradletextiles.com/#3.4d4d33.155d5b.721b29.1a945c.512122.559269.846c48.5e8929.54220e" }
+  , { name ="Kate Graham Krengel", link ="http://chromatic.catscradletextiles.com/#3.31395d.ebffcc.9e1987.36b0d8.512122.ddeeee.54220e.92bfdb.c2c20a" }
+  , { name ="Kacey Birch", link ="http://chromatic.catscradletextiles.com/#2.d2d8dc.c69fad.ffd57a.36b0d8.fdfff7.c69fad.ffd57a.b6dbed.fdfff7" }
+  , { name ="Amanda Merida", link ="http://chromatic.catscradletextiles.com/#1.000000.c2c20a.5e8929.275e38.5e8929.2b2003.33192b.33192b.33192b" }
+  , { name ="Silvia Barriga ", link ="http://chromatic.catscradletextiles.com/#1.000000.54220e.64191d.54220e.54220e.92bfdb.c30b0d.bd0102.c30b0d" }
+  , { name ="Amanda Merida", link ="http://chromatic.catscradletextiles.com/#1.000000.ff8e9a.bc5256.275e38.5e8929.2b2003.33192b.33192b.33192b" }
+  , { name ="Silvia Barriga ", link ="http://chromatic.catscradletextiles.com/#1.000000.64191d.c30b0d.a01e32.bd0102.36b0d8.1aa49d.721b29.512122" }
   ]
