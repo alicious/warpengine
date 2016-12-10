@@ -113,8 +113,13 @@ function main () {
         if ( threads.length != 0 )
             threadWidth = Math.ceil(warpWidth/threads.length);
 
+        //BUG: Doing this for now makes things blurry but
+        //     also is easer on the GPU memory which is better
+        //     for phones.
+        threadWidth = 1;
+        
         warpWidth = threads.length * threadWidth;
-        warpHeight = WARP_HEIGHT * warpWidth/bounds.width ;
+        warpHeight = Math.ceil(WARP_HEIGHT * warpWidth/bounds.width) ;
         
         
         canvas.width = warpWidth;
@@ -124,7 +129,7 @@ function main () {
 
         
         var tupleBuffer = document.createElement("canvas");
-        tupleBuffer.width  = warpWidth;
+        tupleBuffer.width  = warpWidth * 3;
         tupleBuffer.height = warpHeight;
         
         var tupleOffsets = {};
@@ -132,7 +137,7 @@ function main () {
         var tupleContext = tupleBuffer.getContext('2d');
 
         tupleContext.fillStyle = "rgba(0,0,0,0)"; 
-	tupleContext.fillRect( 0, 0, warpWidth, warpWidth );
+	tupleContext.fillRect( 0, 0, warpWidth, warpWidth * 3 );
         tupleContext.fillStyle = "#000000";
 
         var start = 0;
