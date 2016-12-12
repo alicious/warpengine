@@ -15,12 +15,12 @@ import Task
 import Style 
 import MB
 
-import BeSides 
-import LandOfEnchantment
-import AmethystMary
-import CloseToHome
-import PWFade
-import Labyrinth
+import Drafts.BeSides as BeSides 
+import Drafts.LandOfEnchantment as LandOfEnchantment
+import Drafts.AmethystMary as AmethystMary
+import Drafts.CloseToHome as CloseToHome
+import Drafts.PWFade as PWFade
+import Drafts.Labyrinth as Labyrinth
 
 import Ports
 import Model exposing (..)

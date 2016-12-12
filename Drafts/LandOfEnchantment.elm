@@ -1,4 +1,4 @@
-module LandOfEnchantment exposing (..)
+module Drafts.LandOfEnchantment exposing (..)
 
 warp = 
   { name = "Land of Enchantment"

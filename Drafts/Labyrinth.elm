@@ -1,4 +1,4 @@
-module Labyrinth exposing (..)
+module Drafts.Labyrinth exposing (..)
 
 warp = 
   { name = "Labyrinth" 

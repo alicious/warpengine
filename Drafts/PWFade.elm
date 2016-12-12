@@ -1,4 +1,4 @@
-module PWFade exposing (..)
+module Drafts.PWFade exposing (..)
 
 warp = 
   { name = "Plain Weave Fade" 

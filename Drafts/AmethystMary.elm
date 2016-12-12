@@ -1,4 +1,4 @@
-module AmethystMary exposing (..)
+module Drafts.AmethystMary exposing (..)
 
 warp = 
   { name = "Amethyst Mary"

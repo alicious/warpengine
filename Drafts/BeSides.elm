@@ -1,4 +1,4 @@
-module BeSides exposing (..)
+module Drafts.BeSides exposing (..)
 
 warp = 
   { name = "BeSides"
