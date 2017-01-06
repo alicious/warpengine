@@ -1,7 +1,7 @@
-module Drafts.WarpName exposing (..)
+module Drafts.TheUpsideDown exposing (..)
 
 warp = 
-  { name = "Warp Name" 
+  { name = "The UpsideDown, by OH Babies" 
   , warpColors =
     "[]"
 
@@ -36,8 +36,6 @@ warp =
     , ( 7, { hex = "#ffffff", name = "white" } )
     , ( 8, { hex = "#ffffff", name = "white" } )
     ]
-
-  , about = "info about the draft \n\nDesign tip:"
   
   }
 

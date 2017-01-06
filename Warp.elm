@@ -41,7 +41,7 @@ initWarp warp =
 
 initPalette : Palette
 initPalette =
-  let warp = BeSides.warp in fromList warp.defaultPalette
+  let warp = LandOfEnchantment.warp in fromList warp.defaultPalette
 
 initTemplates : Dict Int Warp
 initTemplates = 
@@ -61,9 +61,9 @@ initModel location =
   let ( templateId, palette ) = 
     case Url.parseHash Url.string location of
       Just params -> decodeDesign params
-      Nothing -> ( 0, initPalette ) 
+      Nothing -> ( 1, initPalette ) 
   in
-    { warp = ( Maybe.withDefault ( initWarp BeSides.warp ) 
+    { warp = ( Maybe.withDefault ( initWarp LandOfEnchantment.warp ) 
               ( Dict.get templateId initTemplates ) )
     , palette = palette
     , selectedPalette = 1
